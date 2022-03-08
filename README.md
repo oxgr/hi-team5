@@ -2,5 +2,6 @@
 
 - Daniel
 - faadhi!
+- Arusha
 - faadhi's clone
 - Yifan
