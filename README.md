@@ -1,2 +1,8 @@
-# hi-team5  
+# hi-team5
+
+- Daniel
+- faadhi!
+- Arusha
+- faadhi's clone
+- Yifan
 - Almark
