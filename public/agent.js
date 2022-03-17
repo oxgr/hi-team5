@@ -6,12 +6,21 @@
         - newPos: p5.Vector
         - color : hexadecimal color code
 */
-function drawAgent( agent ) {
+
+function setup(){
+
+}
+
+function drawAgent( agent ,sprite) {
   
   agent.pos.lerp( agent.newPos, 0.1 );
-  
-  fill( agent.color );
-  ellipse( agent.pos.x, agent.pos.y, 50 );
+
+  console.log(agent.pos.x+" , "+agent.pos.y);
+  //fill( agent.color );
+  //ellipse( agent.pos.x, agent.pos.y, 50 );
+    boxSprite.attractionPoint(0.2,agent.pos.x,agent.pos.y);
+    boxSprite.maxSpeed = 5;
+    drawSprites();
   
 }
 
@@ -70,7 +79,7 @@ function updateAgent( data ) {
 /**
 * Finds an agent in the world by matching the color code, then removes it from the world.
 
-* @param Object data* @param Object data A packet of data received from the server. Contains a color to id the agent and x, y properties.
+* @param Object data A packet of data received from the server. Contains a color to id the agent and x, y properties.
 */
 function popAgent( data ) {
   
