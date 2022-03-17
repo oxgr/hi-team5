@@ -28,6 +28,15 @@ let thisAgent = {};
 
 let world = [];
 
+let sprite;
+
+function preload() {
+
+  // sprite = loadImage( './assets/sprite.png' );
+  // json = loadJSON( '[...].json')
+
+}
+
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
@@ -41,6 +50,8 @@ function setup() {
   
   // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
+
+  // image( sprite, 100, 100 );
   
   // Initialises thisAgent with a random hexadecimal color code string ( '#0129af' ) and a random position.
   thisAgent = {
