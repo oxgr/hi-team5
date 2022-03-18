@@ -2,9 +2,9 @@ class Agent {
   
   constructor( x, y, color ) {
     
-    this.color  = color,
-    this.pos    = createVector( x, y ),
-    this.target = createVector( x, y )
+    this.color  = color;
+    this.pos    = createVector( x, y );
+    this.target = createVector( x, y );
     
   }
   
