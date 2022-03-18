@@ -19,16 +19,11 @@ data = {
 */
 
 
-// import 'https://cdn.jsdelivr.net/npm/p5';
-// import { io } from 'https://cdn.socket.io/4.4.1/socket.io.esm.min.js';
-
 let socket;
 
-let thisAgent = {};
+let localAgent;
 
-let world = [];
-
-let sprite;
+let world;
 
 function preload() {
 
@@ -42,29 +37,35 @@ function preload() {
 */
 function setup() {
   
-  // Establishes socket.io connection to server.
-  socket = io.connect('https://hi5-online.glitch.me/');
-  
-  // Sets up event listeners. Declared further below.
-  setupSocketListeners( socket );
-  
-  // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
+    // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
-
-  // image( sprite, 100, 100 );
   
-  // Initialises thisAgent with a random hexadecimal color code string ( '#0129af' ) and a random position.
-  thisAgent = {
-    color  : thisAgent.id = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 ),
-    pos    : createVector( random( width ), random( height ) ),
-    newPos : createVector( random( width ), random( height ) )
-  }
+  // Create a new world that includes information on agents and environment.
+  world = new World();
+  
+  // Establishes socket.io connection to server.
+  socket = initSocket( 'https://hi5-online.glitch.me' );
+  
+  // Sets up event listeners. 
+  setupSocketListeners( socket, world );
+  
+  // Generate a random hexadecimal color code. Example: '#0129af'
+  const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
+
+  // Initialises thisAgent with a random position and color
+  localAgent = new Agent( random( width), random( height ), randomColor );
   
   // Adds thisAgent to the local world.
-  world.push( thisAgent );
+  world.agents.push( localAgent );
+  
+  // Retrieves current world from the server.
+  socket.emit( 'getAgentsInWorld', 0 );
+  
+  // Packages thisAgent and adds it to server world.
+  socket.emit( 'add', localAgent.getData() );
   
   // Packages thisAgent and sends it to other client worlds.
-  sendAgent( thisAgent );
+  socket.emit( 'update', localAgent.getData() );
 
 }
 
@@ -75,66 +76,16 @@ function draw() {
   
   background('#d3e8f2');
   
-  stroke( '#444444' );
+  // Optionally draw background here.
+  // world.drawBackground();
   
-  const spacing = 50;
-  drawMap( width, height, spacing );
-  
+  // Disable the outline of the shape.
   noStroke();
-  for ( let agent of world ) {
-    drawAgent( agent );
+  
+  // Run these methods for every agent in the world
+  for ( let agent of world.agents ) {
+    agent.move( 0.1 );
+    agent.show();
   }
-  
-}
-
-function drawMap( width, height, spacing ) {
-  
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-      if(x % spacing == 0 && y % spacing == 0 )
-        point(x, y);
-    } 
-  }
-  
-}
-
-/**
-* p5.js function. Runs every time the mouse is clicked or a tap is made on a touchscreen.
-*/
-function mouseClicked() {
-  
-  thisAgent.newPos.x = mouseX;
-  thisAgent.newPos.y = mouseY;
-  
-  sendAgent( thisAgent );
-  
-}
-
-/**
-* Initialises the listeners for socket events. These listeners decide what to do when an event/message is received from the server.
-
-The event pipeline is:
-  1. Client (this sketch) sends events with socket.emit( topic, payload )
-  2. Server receives event and handles in server.js.
-  3. Server possibly sends the event to other clients with socket.broadcast.emit() or io.emit()
-  4. Client receives events and handles it in this method.
-  
-Some names of events are determined by socket.io and are found in the socket.io API (https://socket.io/docs/v4/client-api/) e.g. the 'connect' event is emitted when a connection attempt to the server is successful.
-
-Other names (world, update, etc...) are made up, so feel free to add new events as necessary! Just be sure to make the appropriate changes for steps 2 and 3 in server.js. If you're confused, ask Faadhi!
-
-* @param <Socket.io> socket The instance of a socket.io connection.
-*/
-function setupSocketListeners( socket ) {
-  
-  socket.on( 'connect', () => {
-    console.log( 'connected to server!')
-    socket.emit( 'getWorld' );
-  });
-  
-  socket.on( 'world',   ( world ) => updateWorld( world ) );
-  socket.on( 'update',  ( data ) => updateAgent( data ) );
-  socket.on( 'push',    ( data ) => pushAgent( data ));
-  socket.on( 'pop',     ( data ) => popAgent( data ));
   
 }

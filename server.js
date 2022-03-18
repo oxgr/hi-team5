@@ -9,9 +9,18 @@ console.log('Server running! Listening on ' + process.env.PORT )
 app.use( express.static( 'public' ) );
 
 const socket = require( 'socket.io' );
-const io = socket( server );
+const io = socket( server, {
+  cors: {
+    origin: '*'
+  }
+} );
 
-let world = [];
+let world = {
+
+  agents: [],
+  environment: []
+
+};
 
 io.on( 'connection', newConnection );
 
@@ -21,34 +30,46 @@ function newConnection( socket ) {
   
   // Server-side listeners go here!
   
-  socket.on( 'getWorld', () => {
-    io.to( socket.id ).emit( 'world', world );
+  socket.on( 'getAgentsInWorld', () => {
+    
+    io.to( socket.id ).emit( 'agentsInWorld', world.agents );
+    
   } )
   
   socket.on( 'update', ( data ) => {
+    
     socket.broadcast.emit( 'update', data );
-    const exists = world.find( ( agent ) => agent.color == data.color )
+    
+    const exists = world.agents.find( ( agent ) => agent.color == data.color )
   
     if ( exists ) {
       exists.x = data.x;
       exists.y = data.y;
+    } else {
+      world.agents.push(data);
     }
+    
   })
   
-  socket.on( 'push', ( data ) => {
-    socket.broadcast.emit( 'push', data );
+  socket.on( 'add', ( data ) => {
+    
+    socket.broadcast.emit( 'add', data );
     socket.data.color = data.color;
-    world.push(data);
-  })
+    world.agents.push(data);
+    
+  });
   
   socket.on( 'disconnect', () => {
-    io.emit( 'pop', socket.data );
-    const index = world.findIndex( ( agent ) => agent.color == socket.data.color );
+    
+    io.emit( 'remove', socket.data );
+    
+    const index = world.agents.findIndex( ( agent ) => agent.color == socket.data.color );
   
     if ( index > -1) {
-      world.splice( index, 1 );
+      world.agents.splice( index, 1 );
       console.log('someone disconnected! ');
     }
+    
   });
   
   //
