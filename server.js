@@ -9,7 +9,11 @@ console.log('Server running! Listening on ' + process.env.PORT )
 app.use( express.static( 'public' ) );
 
 const socket = require( 'socket.io' );
-const io = socket( server );
+const io = socket( server, {
+  cors: {
+    origin: '*'
+  }
+} );
 
 let world = {
 
