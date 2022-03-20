@@ -36,7 +36,7 @@ var boxSprite;
 
 function setup() {
   //create a sprite with a placeholder rectangle as visual component
-    boxSprite = createSprite(0, 0, 50, 100);
+  boxSprite = createSprite(0, 0, 50, 100);
   boxSprite.shapeColor = color(222, 125, 2);
   
   // Establishes socket.io connection to server.
