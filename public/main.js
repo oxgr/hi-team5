@@ -38,13 +38,12 @@ var newone
 *  p5.js function. Called once at the start of the sketch.
 */
 function preload() {
-  sequenceAnimation = loadAnimation("BallSprite/Layer 1_sprite_1.png", "BallSprite/Layer 1_sprite_2.png");
+  sequenceAnimation = loadAnimation("https://drive.google.com/file/d/1D8SajzpvY3N5B1ctiTJdQl_rypiaFRs2/view?usp=sharing");
 }
 
 function setup() {
   //create a sprite with a placeholder rectangle as visual component
   boxSprite = createSprite(0, 0, 50, 100);
-  //newone = createSprite(0,0,50,50);
   boxSprite.shapeColor = color(222, 125, 2);
   
   // Establishes socket.io connection to server.

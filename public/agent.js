@@ -20,8 +20,7 @@ function drawAgent( agent ,sprite) {
   //ellipse( agent.pos.x, agent.pos.y, 50 );
     boxSprite.attractionPoint(0.2,agent.pos.x,agent.pos.y);
     boxSprite.maxSpeed = 5;
-    animation(sequenceAnimation, agent.pos.x, agent.pos.y);
-   // drawSprites();
+    drawSprites();
   
 }
 
