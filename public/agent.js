@@ -15,12 +15,13 @@ function drawAgent( agent ,sprite) {
   
   agent.pos.lerp( agent.newPos, 0.1 );
 
-  console.log(agent.pos.x+" , "+agent.pos.y);
+  //console.log(agent.pos.x+" , "+agent.pos.y);
   //fill( agent.color );
   //ellipse( agent.pos.x, agent.pos.y, 50 );
     boxSprite.attractionPoint(0.2,agent.pos.x,agent.pos.y);
     boxSprite.maxSpeed = 5;
-    drawSprites();
+    animation(sequenceAnimation, agent.pos.x, agent.pos.y);
+   // drawSprites();
   
 }
 
