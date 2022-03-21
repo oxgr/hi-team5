@@ -25,11 +25,21 @@ let localAgent;
 
 let world;
 
+var sphere;
+
+var sequenceAnimation;
+
 function preload() {
 
-  // sprite = loadImage( './assets/sprite.png' );
-  // json = loadJSON( '[...].json')
-
+ loadImage("http://localhost:3000/BallSprite/001.png");
+  loadImage("http://localhost:3000/BallSprite/002.png");
+  loadImage("http://localhost:3000/BallSprite/003.png");
+  loadImage("http://localhost:3000/BallSprite/004.png");
+  loadImage("http://localhost:3000/BallSprite/005.png");
+  loadImage("http://localhost:3000/BallSprite/006.png");
+  loadImage("http://localhost:3000/BallSprite/007.png");
+  loadImage("http://localhost:3000/BallSprite/008.png");
+sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
 }
 
 /**
@@ -37,6 +47,9 @@ function preload() {
 */
 function setup() {
   
+    //create a sprite with a sphere
+
+
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
   
@@ -86,6 +99,10 @@ function draw() {
   for ( let agent of world.agents ) {
     agent.move( 0.1 );
     agent.show();
+    //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
+  
+  
+  drawSprites();
   
 }

@@ -5,6 +5,9 @@ class Agent {
     this.color  = color;
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
+    this.sphere = createSprite(0, 0, 32, 32);
+    this.sphere.addAnimation("fun", sequenceAnimation);
+    this.sphere.maxSpeed = 5;
     
   }
   
@@ -22,8 +25,9 @@ class Agent {
   */
   show() {
 
-    fill( this.color );
-    ellipse( this.pos.x, this.pos.y, 50 );
+    //fill( this.color );
+    //ellipse( this.pos.x, this.pos.y, 50 );
+    this.sphere.attractionPoint(0.2, this.pos.x, this.pos.y);
 
   }
 
