@@ -29,9 +29,10 @@ var sphere;
 
 var sequenceAnimation;
 
-function preload() {
+var img;
 
- loadImage("http://localhost:3000/BallSprite/001.png");
+function preload() {
+ img= loadImage("http://localhost:3000/BallSprite/001.png");
   loadImage("http://localhost:3000/BallSprite/002.png");
   loadImage("http://localhost:3000/BallSprite/003.png");
   loadImage("http://localhost:3000/BallSprite/004.png");
@@ -46,8 +47,6 @@ sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "h
 *  p5.js function. Called once at the start of the sketch.
 */
 function setup() {
-  
-    //create a sprite with a sphere
 
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
@@ -64,7 +63,8 @@ function setup() {
   
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
-
+    //create a sprite with a sphere
+//sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
   // Initialises thisAgent with a random position and color
   localAgent = new Agent( random( width), random( height ), randomColor );
   

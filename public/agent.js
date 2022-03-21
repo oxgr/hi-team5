@@ -1,11 +1,16 @@
+
 class Agent {
-  
+
   constructor( x, y, color ) {
-    
     this.color  = color;
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
+    this.img=loadImage("http://localhost:3000/BallSprite/001.png");
+  image(this.img, 0, 0);
+  tint(this.color); // Tint random
+  image(this.img, 50, 0);
     this.sphere = createSprite(0, 0, 32, 32);
+    this.sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
     this.sphere.addAnimation("fun", sequenceAnimation);
     this.sphere.maxSpeed = 5;
     
