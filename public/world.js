@@ -19,7 +19,13 @@ class World {
     */
   addAgent( data ) {
 
-    this.agents.push( new Agent( data.x, data.y, data.color) )
+    // If data is already an Agent object, no need to create a new one.
+    if ( data instanceof Agent ) {
+      this.agents.push( data );
+    } else {
+      this.agents.push( new Agent( data.x, data.y, data.color) );  
+    }
+    
     console.log( '[WORLD]: Agent %s added!', data.color );
 
   }

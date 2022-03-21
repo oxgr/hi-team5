@@ -25,6 +25,8 @@ let localAgent;
 
 let world;
 
+let soundEnabled = false;
+
 function preload() {
 
   // sprite = loadImage( './assets/sprite.png' );
@@ -56,7 +58,7 @@ function setup() {
   localAgent = new Agent( random( width), random( height ), randomColor );
   
   // Adds thisAgent to the local world.
-  world.agents.push( localAgent );
+  world.addAgent( localAgent );
   
   // Retrieves current world from the server.
   socket.emit( 'getAgentsInWorld', 0 );
@@ -66,6 +68,8 @@ function setup() {
   
   // Packages thisAgent and sends it to other client worlds.
   socket.emit( 'update', localAgent.getData() );
+
+  // soundSetup();
 
 }
 
@@ -87,5 +91,8 @@ function draw() {
     agent.move( 0.1 );
     agent.show();
   }
+
+  if (soundEnabled)
+    soundDraw();
   
 }
