@@ -1,11 +1,5 @@
-# hi-team5
+# hi5-online!
 
-- Daniel
-- faadhi!
-- Arusha
-- faadhi's clone
-- Yifan
-- Almark
-- Bohan
-- Runtong
-- Chang
+A mobile-first online multiplayer experience created as part of DATT 3700.
+
+Server hosted on https://hi5-online.glitch.me/
