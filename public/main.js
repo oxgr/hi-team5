@@ -32,19 +32,36 @@ var boxSprite;
 
 var sequenceAnimation;
 
-var newone
+var newone;
+
+var sphere;
 
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
 function preload() {
-  sequenceAnimation = loadAnimation("https://drive.google.com/file/d/1D8SajzpvY3N5B1ctiTJdQl_rypiaFRs2/view?usp=sharing");
+  loadImage("http://localhost:3000/BallSprite/001.png");
+  loadImage("http://localhost:3000/BallSprite/002.png");
+  loadImage("http://localhost:3000/BallSprite/003.png");
+  loadImage("http://localhost:3000/BallSprite/004.png");
+  loadImage("http://localhost:3000/BallSprite/005.png");
+  loadImage("http://localhost:3000/BallSprite/006.png");
+  loadImage("http://localhost:3000/BallSprite/007.png");
+  loadImage("http://localhost:3000/BallSprite/008.png");
+sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
+ 
 }
 
 function setup() {
+   
+   //sphere.addAnimation("Ball Rolling", sequenceAnimation);
+   //sphere.addImage("http://localhost:3000/BallSprite/001.png");
+
   //create a sprite with a placeholder rectangle as visual component
   boxSprite = createSprite(0, 0, 50, 100);
   boxSprite.shapeColor = color(222, 125, 2);
+  sphere = createSprite(0, 0, 32, 32);
+  sphere.addAnimation("fun", sequenceAnimation);
   
   // Establishes socket.io connection to server.
   socket = io.connect('https://hi5-online.glitch.me/');
@@ -78,6 +95,8 @@ function draw() {
   background('#d3e8f2');
 
   stroke( '#444444' );
+
+  
   
   const spacing = 50;
   // drawMap( width, height, spacing );

@@ -12,15 +12,10 @@ function setup(){
 }
 
 function drawAgent( agent ,sprite) {
-  
+  sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
+  sphere.maxSpeed = 5;
   agent.pos.lerp( agent.newPos, 0.1 );
-
-  //console.log(agent.pos.x+" , "+agent.pos.y);
-  //fill( agent.color );
-  //ellipse( agent.pos.x, agent.pos.y, 50 );
-    boxSprite.attractionPoint(0.2,agent.pos.x,agent.pos.y);
-    boxSprite.maxSpeed = 5;
-    drawSprites();
+  drawSprites();
   
 }
 
