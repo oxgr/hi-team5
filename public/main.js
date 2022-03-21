@@ -58,8 +58,6 @@ function setup() {
    //sphere.addImage("http://localhost:3000/BallSprite/001.png");
 
   //create a sprite with a placeholder rectangle as visual component
-  boxSprite = createSprite(0, 0, 50, 100);
-  boxSprite.shapeColor = color(222, 125, 2);
   sphere = createSprite(0, 0, 32, 32);
   sphere.addAnimation("fun", sequenceAnimation);
   
