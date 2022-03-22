@@ -1,4 +1,7 @@
 let r;
+let size;
+var circles;
+
 class Agent {
 
   constructor( x, y, color, r ) {
@@ -6,14 +9,13 @@ class Agent {
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
     this.r      = round(random(1,5));
-    this.sphere = createSprite(0, 0, 32, 32);
+    this.sphere = createSprite(random(0, width), random(0,height));
     sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
     sequenceAnimation.frameDelay=20;
     this.sphere.addAnimation("fun", sequenceAnimation);
     this.sphere.maxSpeed = this.r;
     console.log(round(this.r));
-    
-    
+    this.size=random(20,50);
   }
   
   /**
@@ -31,7 +33,7 @@ class Agent {
   show() {
 
     fill( this.color );
-    ellipse( this.sphere.position.x, this.sphere.position.y, 40 );
+    ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
     this.sphere.attractionPoint(this.r/25, this.pos.x, this.pos.y);
   }
 
