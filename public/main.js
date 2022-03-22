@@ -32,15 +32,15 @@ var sequenceAnimation;
 var img;
 
 function preload() {
- img= loadImage("http://localhost:3000/BallSprite/001.png");
-  loadImage("http://localhost:3000/BallSprite/002.png");
-  loadImage("http://localhost:3000/BallSprite/003.png");
-  loadImage("http://localhost:3000/BallSprite/004.png");
-  loadImage("http://localhost:3000/BallSprite/005.png");
-  loadImage("http://localhost:3000/BallSprite/006.png");
-  loadImage("http://localhost:3000/BallSprite/007.png");
-  loadImage("http://localhost:3000/BallSprite/008.png");
-sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
+   img=loadImage("http://localhost:3000/BallSprite/001.png");
+   loadImage("http://localhost:3000/BallSprite/002.png");
+   loadImage("http://localhost:3000/BallSprite/003.png");
+   loadImage("http://localhost:3000/BallSprite/004.png");
+   loadImage("http://localhost:3000/BallSprite/005.png");
+   loadImage("http://localhost:3000/BallSprite/006.png");
+   loadImage("http://localhost:3000/BallSprite/007.png");
+   loadImage("http://localhost:3000/BallSprite/008.png");
+
 }
 
 /**
@@ -48,6 +48,10 @@ sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "h
 */
 function setup() {
 
+    image(img, 0, 0);
+    tint(255, 126); // Apply transparency without changing color
+    image(img, 50, 0);
+    sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
@@ -63,8 +67,7 @@ function setup() {
   
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
-    //create a sprite with a sphere
-//sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
+// 
   // Initialises thisAgent with a random position and color
   localAgent = new Agent( random( width), random( height ), randomColor );
   
