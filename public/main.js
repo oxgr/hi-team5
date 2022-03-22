@@ -25,8 +25,6 @@ let localAgent;
 
 let world;
 
-let soundEnabled = false;
-
 function preload() {
 
   // sprite = loadImage( './assets/sprite.png' );
@@ -69,7 +67,7 @@ function setup() {
   // Packages thisAgent and sends it to other client worlds.
   socket.emit( 'update', localAgent.getData() );
 
-  // soundSetup();
+  soundSetup();
 
 }
 
@@ -82,6 +80,8 @@ function draw() {
   
   // Optionally draw background here.
   // world.drawBackground();
+
+  localAgent.updateTarget( {x: mouseX, y: mouseY });
   
   // Disable the outline of the shape.
   noStroke();
@@ -92,7 +92,6 @@ function draw() {
     agent.show();
   }
 
-  if (soundEnabled)
-    soundDraw();
+  soundDraw();
   
 }

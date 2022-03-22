@@ -7,9 +7,7 @@ function mouseClicked() {
   
   socket.emit( 'update', localAgent.getData() );
 
-  soundSetup();
-
-  soundEnabled = true;
+  dropSound( localAgent.pos.x, localAgent.pos.y );
   
 }
 
@@ -20,6 +18,13 @@ function keyPressed() {
   // if spacebar
   if ( keyCode == 32 ) {
     soundEnabled = !soundEnabled;
+    toggleSound( soundEnabled );
+
+    console.log({ soundEnabled: soundEnabled })
+  }
+
+  if (keyCode == BACKSPACE) {
+    sounds = [];
   }
 
   if ( keyCode == 68 ) {
