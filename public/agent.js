@@ -1,10 +1,18 @@
 class Agent {
   
+  clicked(){
+    let d=dist(mouseX,mouseY,this.pos.x,this.pos.y);
+    if(d<this.radius){
+    mySound.play();
+      console.log("clicked on the bubble!");
+    }
+  }
   constructor( x, y, color ) {
     
     this.color  = color;
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
+    this.radius = 50;
     
   }
   
@@ -23,7 +31,7 @@ class Agent {
   show() {
 
     fill( this.color );
-    ellipse( this.pos.x, this.pos.y, 50 );
+    ellipse( this.pos.x, this.pos.y, this.radius );
 
   }
 

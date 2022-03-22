@@ -18,6 +18,7 @@ data = {
 
 */
 
+let mySound;
 
 let socket;
 
@@ -25,11 +26,13 @@ let localAgent;
 
 let world;
 
+
 function preload() {
 
   // sprite = loadImage( './assets/sprite.png' );
   // json = loadJSON( '[...].json')
-
+  soundFormats('mp3', 'ogg');
+  mySound = loadSound('assets/doorbell.mp3');
 }
 
 /**
@@ -87,5 +90,6 @@ function draw() {
     agent.move( 0.1 );
     agent.show();
   }
+  
   
 }

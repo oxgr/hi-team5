@@ -8,3 +8,6 @@ function mouseClicked() {
   socket.emit( 'update', localAgent.getData() );
   
 }
+function mousePressed(){	
+  localAgent.clicked();
+}
