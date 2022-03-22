@@ -1,17 +1,18 @@
+let r;
 class Agent {
 
-  constructor( x, y, color ) {
+  constructor( x, y, color, r ) {
     this.color  = color;
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
+    this.r      = round(random(1,5));
     this.sphere = createSprite(0, 0, 32, 32);
-    this.sphere.addAnimation("fun", sequenceAnimation);
-    this.sphere.maxSpeed = 5;
-
-        image(img, 0, 0);
-    tint(255, 126); // Apply transparency without changing color
-    image(img, 50, 0);
     sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
+    sequenceAnimation.frameDelay=20;
+    this.sphere.addAnimation("fun", sequenceAnimation);
+    this.sphere.maxSpeed = this.r;
+    console.log(round(this.r));
+    
     
   }
   
@@ -31,7 +32,7 @@ class Agent {
 
     fill( this.color );
     ellipse( this.sphere.position.x, this.sphere.position.y, 40 );
-    this.sphere.attractionPoint(0.2, this.pos.x, this.pos.y);
+    this.sphere.attractionPoint(this.r/25, this.pos.x, this.pos.y);
   }
 
   /**
@@ -59,7 +60,6 @@ class Agent {
       color: this.color,
       x    : this.target.x,
       y    : this.target.y
-
     }
 
     return data;
