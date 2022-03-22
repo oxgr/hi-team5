@@ -32,7 +32,6 @@ var sequenceAnimation;
 var img;
 
 
-
 function preload() {
    loadImage("http://localhost:3000/BallSprite/001.png");
    loadImage("http://localhost:3000/BallSprite/002.png");
@@ -49,12 +48,6 @@ function preload() {
 *  p5.js function. Called once at the start of the sketch.
 */
 function setup() {
-
-    // image(img, 0, 0);
-    // tint(255, 126); // Apply transparency without changing color
-    // image(img, 50, 0);
-    // sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
-   //r = random(1,5);
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
