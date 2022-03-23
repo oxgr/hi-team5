@@ -11,6 +11,10 @@ function mouseClicked() {
   
 }
 
+function mouseDragged() {
+  
+}
+
 function keyPressed() {
 
   console.log( keyCode );
@@ -24,7 +28,7 @@ function keyPressed() {
   }
 
   if (keyCode == BACKSPACE) {
-    sounds = [];
+    clearSounds();
   }
 
   if ( keyCode == 68 ) {

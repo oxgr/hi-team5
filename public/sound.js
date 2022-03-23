@@ -2,9 +2,8 @@
 let soundEnabled = false;
 
 let osc, envelope, fft;
-
-let scaleArray = [60, 62, 64, 65, 67, 69, 71, 72];
-let note = 0;
+let scaleArray;
+let noteCounter = 0;
 
 let sounds;
 
@@ -21,9 +20,84 @@ function soundSetup() {
   // set attackLevel, releaseLevel
   envelope.setRange(1, 0);
 
-  
+  scaleArray = [60, 62, 64, 65, 67, 69, 71, 72];
 
   sounds = [];
+
+  soundTargetPos = createVector();
+  soundCurrentPos = createVector();
+  soundHighlightPos = createVector();
+
+}
+
+function soundDraw() {
+
+  // soundCurrentPos.copy( sounds[currentNote].pos );
+
+  for (let sound of sounds ) {
+    fill('pink')
+    rect( sound.pos.x, sound.pos.y, 20 );
+  }
+
+  soundCurrentPos.lerp( soundTargetPos, 0.05 );
+
+  fill( 'red' );
+  rect( soundCurrentPos.x, soundCurrentPos.y, 20 );
+
+
+  if (frameCount % 60 === 0 || frameCount === 1) {
+
+    const currentNote = noteCounter;
+    const nextNote = (currentNote + 1) % (sounds.length);
+
+    updateSoundTargets( currentNote, nextNote );  
+
+    playNotes( currentNote, nextNote );
+
+    if (sounds.length > 1) {
+      noteCounter = nextNote;
+    }
+    
+  }
+
+}
+
+function updateSoundTargets( currentNote, nextNote ) {
+
+  if ( sounds.length > 0) {
+    
+    soundCurrentPos.copy( sounds[ currentNote ].pos );
+
+    if ( sounds.length < 2 ) {
+      soundTargetPos.copy( soundCurrentPos );
+    } else {
+      soundTargetPos = sounds[ nextNote ].pos;
+    }
+
+  }
+
+}
+
+function playNotes( currentNote, nextNote ) {
+
+  let midiValue = scaleArray[ currentNote ];
+  let freqValue = midiToFreq( midiValue );
+  osc.freq( freqValue );
+
+  let amp = 0;
+  if ( sounds.length > 0 ) {
+    amp = constrain( norm(sounds[ currentNote ].pos.dist( localAgent.pos ), 1000, 0), 0.0001, 1);
+  }
+
+  envelope.setRange( amp, 0 );
+  
+  envelope.play(osc, 0, 0.1);
+
+  console.log( {
+    amp: amp,
+    currentNote: currentNote,
+    soundsLength: sounds.length
+  } );
 
 }
 
@@ -39,60 +113,6 @@ function toggleSound( toggle ) {
 
   }
 
-  
-
-}
-
-function soundStart() {
-
-  osc.amp( 0 );
-  osc.start();
-
-}
-
-function soundStop() {
-
-  osc.stop();
-
-}
-
-function soundDraw() {
-
-  for (let sound of sounds ) {
-    if ( sounds.indexOf( sound ) == note) {
-      fill( 'red' );
-      rect( sound.pos.x, sound.pos.y, 20 );
-    } else {
-      fill('pink')
-      rect( sound.pos.x, sound.pos.y, 20 );
-    }
-  }
-
-
-  if (frameCount % 60 === 0 || frameCount === 1) {
-    let midiValue = scaleArray[note];
-    let freqValue = midiToFreq(midiValue);
-    osc.freq(freqValue);
-    let amp = 0;
-    if ( sounds.length > 0 ) {
-      amp = norm(sounds[note].pos.dist( localAgent.pos ), 200, 0);
-    }
-
-    console.log( {amp:amp} );
-    osc.amp( amp );
-
-    envelope.play(osc, 0, 0.1);
-
-    if (sounds.length > 1)
-      note = (note + 1) % (sounds.length);
-    console.log( {
-      note: note,
-      soundsLength: sounds.length
-    })
-  }
-
- 
-
 }
 
 function dropSound( x, y ) {
@@ -102,5 +122,12 @@ function dropSound( x, y ) {
     })
 
     console.log( { sounds: sounds } );
+
+}
+
+function clearSounds() {
+
+  sounds = [];
+  currentNote = 0;
 
 }
