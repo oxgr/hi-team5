@@ -27,6 +27,19 @@ class Agent {
 
   }
 
+
+  /**
+   * 
+   * @param {*} data 
+   */
+   checkSpace(vec, radius) {
+    if (this.pos.dist(vec) < radius) {
+      return 0.001;
+    } else {
+      return 0.1;
+    }
+  }
+
   /**
   * Updates the position of an agent in the world. Tracks down the spcific agent by matching the color code, then updates the new xy values to the newPos vector.
 

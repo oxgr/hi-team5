@@ -25,6 +25,8 @@ let localAgent;
 
 let world;
 
+
+
 function preload() {
 
   // sprite = loadImage( './assets/sprite.png' );
@@ -81,10 +83,20 @@ function draw() {
   
   // Disable the outline of the shape.
   noStroke();
-  
+
+
+  //draw slow circle
+  let circlePos = createVector(windowWidth/2, windowHeight/2);
+  const radius = 100;
+  fill ('white');
+  circle (circlePos.x, circlePos.y, radius);
+
+
+
   // Run these methods for every agent in the world
   for ( let agent of world.agents ) {
-    agent.move( 0.1 );
+    const speed = agent.checkSpace(circlePos, radius);
+    agent.move( speed );
     agent.show();
   }
   
