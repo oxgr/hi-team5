@@ -18,6 +18,8 @@ function setup() {
 
     // synth = new p5.MonoSynth();
 
+    osc = new p5.Oscillator();
+
     p1 = createVector();
     p2 = createVector();
 
@@ -61,7 +63,7 @@ function keyPressed() {
     switch( keyCode ) {
 
         case 32:
-
+            playDrawing();
             break;
 
         case BACKSPACE:
@@ -70,5 +72,11 @@ function keyPressed() {
             break;
 
     }
+
+}
+
+function playDrawing() {
+
+
 
 }
