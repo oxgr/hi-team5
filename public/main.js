@@ -27,6 +27,7 @@ let world;
 var sphere;
 var sequenceAnimation;
 let spheres;
+let bg;
 
 function preload() {
 
@@ -39,6 +40,7 @@ function preload() {
    loadImage("http://localhost:3000/BallSprite/006.png");
    loadImage("http://localhost:3000/BallSprite/007.png");
    loadImage("http://localhost:3000/BallSprite/008.png");
+   bg=loadImage("http://localhost:3000/assets/bg.png");
    sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png","http://localhost:3000/BallSprite/008.png");
 }
 
@@ -87,7 +89,7 @@ spheres = new Group();
 */
 function draw() {
   
-  background('#d3e8f2');
+  background(bg);
   
   // Optionally draw background here.
   // world.drawBackground();
