@@ -83,7 +83,9 @@ function soundDraw() {
       cursorSpeed = 0.05;
     }
 
-    playNote( currentNote );
+    if ( sounds.length > 0 ) {
+      playNote( currentNote );
+    }
 
     // Only cycle through notes if there's more than one placed.
     if (sounds.length > 1) {
@@ -156,7 +158,8 @@ function updateSoundTargets( currentNote, nextNote ) {
 function playNote( currentNote ) {
 
   // Pick a MIDI value from array of notes in scale
-  let midiValue = scaleArray[ currentNote ];
+  // let midiValue = scaleArray[ currentNote ];
+  let midiValue = sounds[ currentNote ].note;
 
   // Get the frequency of that note
   let freqValue = midiToFreq( midiValue );
@@ -241,7 +244,8 @@ function getSoundClicked( mousePos ) {
 function dropSound( pos ) {
 
     sounds.push({
-        pos: createVector( pos.x, pos.y )
+        pos: createVector( pos.x, pos.y ),
+        note: random( 50, 80 )
     })
 }
 
