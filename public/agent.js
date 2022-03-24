@@ -13,6 +13,7 @@ class Agent {
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
     this.radius = 50;
+  
     
   }
   
@@ -32,7 +33,7 @@ class Agent {
 
     fill( this.color );
     ellipse( this.pos.x, this.pos.y, this.radius );
-
+    
   }
 
   /**

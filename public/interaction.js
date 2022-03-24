@@ -10,4 +10,6 @@ function mouseClicked() {
 }
 function mousePressed(){	
   localAgent.clicked();
+  localSoundAgent.Pressed();
+ 
 }

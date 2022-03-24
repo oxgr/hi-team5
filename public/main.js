@@ -17,6 +17,9 @@ data = {
 }
 
 */
+let mic,recorder,soundFile;
+
+let state=0;
 
 let mySound;
 
@@ -26,6 +29,7 @@ let localAgent;
 
 let world;
 
+let localSoundAgent;
 
 function preload() {
 
@@ -39,6 +43,23 @@ function preload() {
 *  p5.js function. Called once at the start of the sketch.
 */
 function setup() {
+  
+  
+  mic = new p5.AudioIn();
+
+  // prompts user to enable their browser mic
+  mic.start();
+
+  // create a sound recorder
+  recorder = new p5.SoundRecorder();
+
+  // connect the mic to the recorder
+  recorder.setInput(mic);
+
+  // this sound file will be used to
+  // playback & save the recording
+  soundFile = new p5.SoundFile();
+
   
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
@@ -58,8 +79,14 @@ function setup() {
   // Initialises thisAgent with a random position and color
   localAgent = new Agent( random( width), random( height ), randomColor );
   
+  localSoundAgent = new SoundAgent( 100, 100, 'green' );
+ 
+
+  
   // Adds thisAgent to the local world.
   world.agents.push( localAgent );
+  
+  world.agents.push( localSoundAgent );
   
   // Retrieves current world from the server.
   socket.emit( 'getAgentsInWorld', 0 );
@@ -72,13 +99,14 @@ function setup() {
 
 }
 
+
 /**
 *  p5.js function. Called continuously. Ideally runs 60 times per second i.e. 60 fps.
 */
 function draw() {
   
   background('#d3e8f2');
-  
+  localSoundAgent.show();
   // Optionally draw background here.
   // world.drawBackground();
   
@@ -89,7 +117,9 @@ function draw() {
   for ( let agent of world.agents ) {
     agent.move( 0.1 );
     agent.show();
-  }
+
   
+  }
+
   
 }
