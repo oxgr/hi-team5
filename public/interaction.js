@@ -2,37 +2,45 @@
 * p5.js function. Runs every time the mouse is clicked or a tap is made on a touchscreen.
 */
 function mouseClicked() {
-  
-  const mousePos = createVector( mouseX, mouseY );
+
+  const mousePos = createVector(mouseX, mouseY);
   // mousePos.set( mouseX, mouseY );
 
-  localAgent.updateTarget( mousePos );
-  
-  socket.emit( 'update', localAgent.getData() );
+  localAgent.updateTarget(mousePos);
 
-  const soundClicked = getSoundClicked( mousePos );
+  socket.emit('update', localAgent.getData());
 
-  if ( soundClicked ) {
-    removeSound( soundClicked );
+  const soundClicked = getSoundClicked(mousePos);
+
+  if (soundClicked) {
+    removeSound(soundClicked);
   } else {
-    dropSound( localAgent.pos );
+    dropSound(localAgent.pos);
   }
+
+  localAgent.clicked();
+  localSoundAgent.Pressed();
+
+}
+
+function mousePressed() {
+
   
-  
+
 }
 
 function mouseDragged() {
-  
+
 }
 
 function keyPressed() {
 
-  console.log( keyCode );
+  console.log(keyCode);
 
   // if spacebar
-  if ( keyCode == 32 ) {
+  if (keyCode == 32) {
     soundEnabled = !soundEnabled;
-    toggleSound( soundEnabled );
+    toggleSound(soundEnabled);
 
     console.log({ soundEnabled: soundEnabled })
   }
@@ -41,7 +49,7 @@ function keyPressed() {
     clearSounds();
   }
 
-  if ( keyCode == 68 ) {
-    dropSound( mouseX, mouseY );
+  if (keyCode == 68) {
+    dropSound(mouseX, mouseY);
   }
 }
