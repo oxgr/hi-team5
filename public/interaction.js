@@ -10,7 +10,7 @@ function mouseClicked() {
   
   socket.emit( 'update', localAgent.getData() );
 
-  const soundClicked = getSourceClicked( mousePos );
+  const soundClicked = getSoundClicked( mousePos );
 
   if ( soundClicked ) {
     removeSound( soundClicked );

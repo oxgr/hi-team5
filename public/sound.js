@@ -1,16 +1,22 @@
 let startTime;
-let soundEnabled = false;
+let soundEnabled;
 
 let osc, envelope, filter;
 let scaleArray;
-let noteCounter = 0;
+let noteCounter;
 
 let sounds, soundSize;
 
-let distToNextNoteInMs;
-let distToNextNoteInSpeed;
+let notePeriodInMs;
+let cursorSpeed;
 
+/**
+ * Called in main setup() once on load.
+ */
 function soundSetup() {
+
+  // Global sound toggle state.
+  soundEnabled = false;
 
   startTimer();
 
@@ -18,6 +24,7 @@ function soundSetup() {
    
   osc = new p5.SinOsc();
 
+  // Disconnect oscillator output, so we only hear the filter output.
   osc.disconnect();
   osc.connect( filter );
 
@@ -30,26 +37,35 @@ function soundSetup() {
   // set attackLevel, releaseLevel
   envelope.setRange(1, 0);
 
+  // array of MIDI notes in C Major scale
   scaleArray = [60, 62, 64, 65, 67, 69, 71, 72];
 
+  // global counter
+  noteCounter = 0;
+
+  // array of placed sounds
   sounds = [];
 
+  // vectors for drawing moving cursor
   soundTargetPos = createVector();
-  soundCurrentPos = createVector();
-  soundHighlightPos = createVector();
+  soundCursorPos = createVector();
 
+  // Size of placed sound.
   soundSize = 30;
 
-  distToNextNoteInMs = 1000;
-  distToNextNoteInSpeed = 0.05;
+  // the distance between the cursor and the nextnote, converted to milliseconds and speed of cursor movement.
+  notePeriodInMs = 1000;
+  cursorSpeed = 0.05;
 
 }
 
+/**
+ * Called in draw() loop 60 fps.
+ */
 function soundDraw() {
 
-  // soundCurrentPos.copy( sounds[currentNote].pos );
-
-  if ( getElapsedTime() > distToNextNoteInMs || frameCount === 1 ) {
+  // Run this every after the timer goes past the note period
+  if ( getElapsedTime() > notePeriodInMs ) {
 
     startTimer();
 
@@ -57,63 +73,87 @@ function soundDraw() {
 
     updateSoundTargets( currentNote, nextNote ); 
 
+    // update the interactive note period and cursor speed based on distance between cursor and next note.
     if ( sounds.length > 1 ) {
-      const dist = sounds[ nextNote ].pos.dist( soundCurrentPos );
-      distToNextNoteInMs = Math.floor( map( dist, 0, 1000, 0, 4000 ) );
-      distToNextNoteInSpeed = map( dist, 0, 1000, 0.1, 0.02);
+      const dist = sounds[ nextNote ].pos.dist( soundCursorPos );
+      notePeriodInMs = Math.floor( map( dist, 0, 1000, 0, 4000 ) );
+      cursorSpeed = map( dist, 0, 1000, 0.1, 0.02);
     } else {
-      distToNextNoteInMs = 1000;
-      distToNextNoteInSpeed = 0.05;
+      notePeriodInMs = 1000;
+      cursorSpeed = 0.05;
     }
 
-    playNotes( currentNote, nextNote );
+    playNote( currentNote );
 
+    // Only cycle through notes if there's more than one placed.
     if (sounds.length > 1) {
       noteCounter = nextNote;
     }
-
-    
     
   }
 
+  // Move from red to green across the array of sounds
   let redVal = 250;
   let greenVal = 180;
 
+  // for every sound object in the sounds array...
   for (let sound of sounds ) {
+
+    // Remove the stroke
     noStroke();
+
+    // Fill with dynamic red & green values
     fill( redVal, greenVal, 180 );
+
+    // Draw an ellipse at the sound's position.
     ellipse( sound.pos.x, sound.pos.y, soundSize );
 
+    // Update red/green values.
     redVal -= 10;
     greenVal += 10;
   }
 
-  soundCurrentPos.lerp( soundTargetPos, distToNextNoteInSpeed );
+  // Move cursor slightly towards next note.
+  soundCursorPos.lerp( soundTargetPos, cursorSpeed );
 
+  // Draw cursor with just a red stroke.
   noFill();
   stroke( 'red' );
   strokeWeight( 2 );
-  ellipse( soundCurrentPos.x, soundCurrentPos.y, soundSize );
+  ellipse( soundCursorPos.x, soundCursorPos.y, soundSize );
 
 }
 
+/**
+ * Updates the global positions of the soundCursor and soundTarget (the next note).
+ * Also makes some checks to ensure that if a sound is removed mid-way, the note will shift to a neighbour instead.
+ * 
+ * @param {number} currentNote 
+ * @param {number} nextNote 
+ */
 function updateSoundTargets( currentNote, nextNote ) {
 
   if ( sounds.length > 0) {
     
-    soundCurrentPos.copy( sounds[ currentNote ].pos );
+    soundCursorPos.copy( sounds[ currentNote ].pos );
 
     if ( sounds.length < 2 ) {
-      soundTargetPos.copy( soundCurrentPos );
+      soundTargetPos.copy( soundCursorPos );
     } else {
       soundTargetPos = sounds[ nextNote ].pos;
-      distToNextNoteInMs = 1000;    }
+    }
 
   }
 
 }
 
-function playNotes( currentNote, nextNote ) {
+/**
+ * Does exactly what it says lol.
+ * 
+ * @param {number} currentNote 
+ * @param {number} nextNote 
+ */
+function playNote( currentNote ) {
 
   // Pick a MIDI value from array of notes in scale
   let midiValue = scaleArray[ currentNote ];
@@ -126,7 +166,7 @@ function playNotes( currentNote, nextNote ) {
 
   // Map mouseX to a the cutoff frequency from the lowest
   // frequency (10Hz) to the highest (22050Hz) that humans can hear
-  if ( soundCurrentPos.dist( slowCirclePos ) < slowCircleRadius ) {
+  if ( soundCursorPos.dist( slowCirclePos ) < slowCircleRadius ) {
     filterFreq = 100;
   } else {
     filterFreq = 20000;
@@ -135,9 +175,10 @@ function playNotes( currentNote, nextNote ) {
   // Map mouseY to resonance (volume boost) at the cutoff frequency
   filterRes = 5;
 
-  // set filter parameters
+  // Set filter parameters
   filter.set(filterFreq, filterRes);
   
+  // Adjust amplitude of envelope based on distance of sound to the mousePos.
   let amp = 0;
   if ( sounds.length > 0 ) {
     amp = constrain( norm(sounds[ currentNote ].pos.dist( localAgent.pos ), 1000, 0), 0.0001, 1);
@@ -145,6 +186,7 @@ function playNotes( currentNote, nextNote ) {
 
   envelope.setRange( amp, 0 );
   
+  // Play the note
   envelope.play(osc, 0, 0.1);
 
   // console.log( {
@@ -156,6 +198,11 @@ function playNotes( currentNote, nextNote ) {
 
 }
 
+/**
+ * Toggles the oscillator to start and stop.
+ * 
+ * @param {boolean} toggle 
+ */
 function toggleSound( toggle ) {
 
   if ( toggle ) {
@@ -170,10 +217,15 @@ function toggleSound( toggle ) {
 
 }
 
-function getSourceClicked( mousePos ) {
+/**
+ * Gets the sound from sound array that was clicked, if any.
+ * 
+ * @param {p5.Vector} mousePos 
+ * @returns The sound object from the sound array if it was clicked; undefined if nothing was clicked.
+ */
+function getSoundClicked( mousePos ) {
 
   for ( let sound of sounds ) {
-    console.log( 'mousepos from sounds = ', mousePos.dist( sound.pos ))
     if ( mousePos.dist( sound.pos ) < soundSize )
       return sound;
   }
@@ -182,37 +234,47 @@ function getSourceClicked( mousePos ) {
 
 }
 
+/**
+ * Adds a new sound into the sounds array at the position given.
+ * @param {p5.Vector} pos 
+ */
 function dropSound( pos ) {
 
     sounds.push({
         pos: createVector( pos.x, pos.y )
     })
-
-    console.log( { sounds: sounds } );
-
 }
 
+/**
+ * Removes a sound from the sound array. Needs to be passed a reference to an object inside the sounds array.
+ * @param {object} sound 
+ */
 function removeSound( sound ) {
 
   const index = sounds.indexOf( sound );
 
-  // if ( index == currentNote ) {
-  //   currentNote--;
-  // } else if ( index == nextNote ) {
-  //   nextNote++;
-  // }
-
-  sounds.splice( index, 1 );
+  if ( index > -1 )
+    sounds.splice( index, 1 );
 
 }
 
+/**
+ * Clear all sounds and reset global values.
+ */
 function clearSounds() {
 
   sounds = [];
   noteCounter = 0;
-  distToNextNoteInMs = 1000;
+  notePeriodInMs = 1000;
+
 }
 
+/**
+ * Returns notes based on current count.
+ * @param {number} count 
+ * @param {array} sounds 
+ * @returns An object with the currentNote and newNote as properties.
+ */
 function getNewNotes( count, sounds ) {
 
   const nextNote = ( count + 1 ) % sounds.length;
@@ -223,6 +285,8 @@ function getNewNotes( count, sounds ) {
   }
 
 }
+
+/************** Helper functions for using timers ***************/
 
 function startTimer() {
   startTime = Date.now();
