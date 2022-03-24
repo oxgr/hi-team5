@@ -2,6 +2,8 @@
 
 let synth;
 
+let osc;
+
 let line;
 
 let p1, p2;
@@ -18,7 +20,7 @@ function setup() {
 
     // synth = new p5.MonoSynth();
 
-    osc = new p5.Oscillator();
+    osc = new p5.SinOsc();
 
     p1 = createVector();
     p2 = createVector();
@@ -77,6 +79,16 @@ function keyPressed() {
 
 function playDrawing() {
 
+    loadPixels();
 
+    osc.start();
+    
+    for (let i = 0; i < width; i += 4) {
+
+        for ( let j = 0; j < height; j++ ) {
+            
+        }
+
+    }
 
 }
