@@ -74,8 +74,8 @@ class Agent {
     //make the sphere move towards a specific point
     this.sphere.attractionPoint(this.speed/25, this.pos.x, this.pos.y);
 
-      //camera.position.x = this.sphere.position.x;
-      //camera.position.y = this.sphere.position.y;
+     // camera.position.x = this.sphere.position.x;
+     // camera.position.y = this.sphere.position.y;
   }
 
   /**
