@@ -1,23 +1,53 @@
-let r;
 let size;
 var circles;
-
+let speed;
+let sphx;
+let sphy;
+let frameSpeed;
 class Agent {
 
-  constructor( x, y, color, r ) {
+  constructor( x, y, color) {
+    //initial Variable setup from main
     this.color  = color;
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
-    this.r      = round(random(1,5));
-    this.size=random(20,50);
-    this.sphere = createSprite(0,0,this.size, this.size);
-    this.sphere.scale=this.size/30;
-    sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png", "http://localhost:3000/BallSprite/008.png");
-    sequenceAnimation.frameDelay=20;
-    this.sphere.addAnimation("fun", sequenceAnimation);
-    this.sphere.maxSpeed = this.r;
-    console.log(round(this.r));
     
+    //set the size of the sprite
+    this.size =random(20,50);
+
+    //map functions
+    //takes the size of the sphere and makes smaller spheres faster and bigger spheres slower
+    this.speed =map(this.size, 20, 50, 5, 1);
+
+    // uses the size of the sphere to set an animation speed for each sphere
+    this.frameSpeed =map(this.size, 20,50,4,20);
+    
+    // sphere x and y coords. Determines where the spheres spawn/ start
+    this.sphx =random(0,width);
+    this.sphy =random(0,height);
+
+    // Sprite creation
+    //created a sprite with and x,y position and an x,y size position
+    this.sphere = createSprite(this.sphx,this.sphy,this.size, this.size);
+    
+    // how big is this sphere going to look?
+    this.sphere.scale=this.size/30;
+
+    // how heavy is the sphere? Good for collisions
+    this.sphere.mass=this.size/20;
+
+    //set the animation speed (default is 4)
+    sequenceAnimation.frameDelay=round(this.frameSpeed);
+
+    //add the animation to the sphere
+    this.sphere.addAnimation("fun", sequenceAnimation);
+
+    // how fast the sphere allowed to travel
+    this.sphere.maxSpeed = this.speed;
+
+    //add the shpere to a group for collision purposes
+    spheres.add(this.sphere);
+
   }
   
   /**
@@ -34,9 +64,15 @@ class Agent {
   */
   show() {
 
+    //creates am ellipse that will follow the sphere sprite's x,y position
     fill( this.color );
     ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
-    this.sphere.attractionPoint(this.r/25, this.pos.x, this.pos.y);
+
+    //the type of collision we ant to use
+    this.sphere.bounce(spheres);
+
+    //make the sphere move towards a specific point
+    this.sphere.attractionPoint(this.speed/25, this.pos.x, this.pos.y);
   }
 
   /**

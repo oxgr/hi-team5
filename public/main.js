@@ -18,21 +18,19 @@ data = {
 
 */
 
-
+//world definition and server variables
 let socket;
-
 let localAgent;
-
 let world;
 
+//sphere sprite and animation variables
 var sphere;
-
 var sequenceAnimation;
-
-var img;
-
+let spheres;
 
 function preload() {
+
+  //loading the images and animation for the sphere sprites
    loadImage("http://localhost:3000/BallSprite/001.png");
    loadImage("http://localhost:3000/BallSprite/002.png");
    loadImage("http://localhost:3000/BallSprite/003.png");
@@ -41,13 +39,16 @@ function preload() {
    loadImage("http://localhost:3000/BallSprite/006.png");
    loadImage("http://localhost:3000/BallSprite/007.png");
    loadImage("http://localhost:3000/BallSprite/008.png");
-
+   sequenceAnimation = loadAnimation("http://localhost:3000/BallSprite/001.png","http://localhost:3000/BallSprite/008.png");
 }
 
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
 function setup() {
+
+//new group added for the sphere sprites to be held. Works like an array
+spheres = new Group();
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
@@ -64,7 +65,6 @@ function setup() {
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
 
-console.log(round(r));
   // Initialises thisAgent with a random position and color
   localAgent = new Agent( random( width), random( height ), randomColor);
   
@@ -101,8 +101,7 @@ function draw() {
     agent.show();
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
-  
-  
+  //draw every sprite that exists into the world
   drawSprites();
   
 }
