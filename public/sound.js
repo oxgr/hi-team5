@@ -1,15 +1,25 @@
-
+let startTime;
 let soundEnabled = false;
 
-let osc, envelope, fft;
+let osc, envelope, filter;
 let scaleArray;
 let noteCounter = 0;
 
-let sounds;
+let sounds, soundSize;
+
+let distToNextNoteInMs;
+let distToNextNoteInSpeed;
 
 function soundSetup() {
+
+  startTimer();
+
+  filter = new p5.LowPass();
    
   osc = new p5.SinOsc();
+
+  osc.disconnect();
+  osc.connect( filter );
 
   // Instantiate the envelope
   envelope = new p5.Env();
@@ -28,37 +38,62 @@ function soundSetup() {
   soundCurrentPos = createVector();
   soundHighlightPos = createVector();
 
+  soundSize = 30;
+
+  distToNextNoteInMs = 1000;
+  distToNextNoteInSpeed = 0.05;
+
 }
 
 function soundDraw() {
 
   // soundCurrentPos.copy( sounds[currentNote].pos );
 
-  for (let sound of sounds ) {
-    fill('pink')
-    rect( sound.pos.x, sound.pos.y, 20 );
-  }
+  if ( getElapsedTime() > distToNextNoteInMs || frameCount === 1 ) {
 
-  soundCurrentPos.lerp( soundTargetPos, 0.05 );
+    startTimer();
 
-  fill( 'red' );
-  rect( soundCurrentPos.x, soundCurrentPos.y, 20 );
+    const { currentNote, nextNote } = getNewNotes( noteCounter, sounds );
 
+    updateSoundTargets( currentNote, nextNote ); 
 
-  if (frameCount % 60 === 0 || frameCount === 1) {
-
-    const currentNote = noteCounter;
-    const nextNote = (currentNote + 1) % (sounds.length);
-
-    updateSoundTargets( currentNote, nextNote );  
+    if ( sounds.length > 1 ) {
+      const dist = sounds[ nextNote ].pos.dist( soundCurrentPos );
+      distToNextNoteInMs = Math.floor( map( dist, 0, 1000, 0, 4000 ) );
+      distToNextNoteInSpeed = map( dist, 0, 1000, 0.1, 0.02);
+    } else {
+      distToNextNoteInMs = 1000;
+      distToNextNoteInSpeed = 0.05;
+    }
 
     playNotes( currentNote, nextNote );
 
     if (sounds.length > 1) {
       noteCounter = nextNote;
     }
+
+    
     
   }
+
+  let redVal = 250;
+  let greenVal = 180;
+
+  for (let sound of sounds ) {
+    noStroke();
+    fill( redVal, greenVal, 180 );
+    ellipse( sound.pos.x, sound.pos.y, soundSize );
+
+    redVal -= 10;
+    greenVal += 10;
+  }
+
+  soundCurrentPos.lerp( soundTargetPos, distToNextNoteInSpeed );
+
+  noFill();
+  stroke( 'red' );
+  strokeWeight( 2 );
+  ellipse( soundCurrentPos.x, soundCurrentPos.y, soundSize );
 
 }
 
@@ -72,7 +107,7 @@ function updateSoundTargets( currentNote, nextNote ) {
       soundTargetPos.copy( soundCurrentPos );
     } else {
       soundTargetPos = sounds[ nextNote ].pos;
-    }
+      distToNextNoteInMs = 1000;    }
 
   }
 
@@ -80,10 +115,29 @@ function updateSoundTargets( currentNote, nextNote ) {
 
 function playNotes( currentNote, nextNote ) {
 
+  // Pick a MIDI value from array of notes in scale
   let midiValue = scaleArray[ currentNote ];
+
+  // Get the frequency of that note
   let freqValue = midiToFreq( midiValue );
+
+  // Set the frequency to the oscillator
   osc.freq( freqValue );
 
+  // Map mouseX to a the cutoff frequency from the lowest
+  // frequency (10Hz) to the highest (22050Hz) that humans can hear
+  if ( soundCurrentPos.dist( slowCirclePos ) < slowCircleRadius ) {
+    filterFreq = 100;
+  } else {
+    filterFreq = 20000;
+  }
+
+  // Map mouseY to resonance (volume boost) at the cutoff frequency
+  filterRes = 5;
+
+  // set filter parameters
+  filter.set(filterFreq, filterRes);
+  
   let amp = 0;
   if ( sounds.length > 0 ) {
     amp = constrain( norm(sounds[ currentNote ].pos.dist( localAgent.pos ), 1000, 0), 0.0001, 1);
@@ -93,11 +147,12 @@ function playNotes( currentNote, nextNote ) {
   
   envelope.play(osc, 0, 0.1);
 
-  console.log( {
-    amp: amp,
-    currentNote: currentNote,
-    soundsLength: sounds.length
-  } );
+  // console.log( {
+  //   amp: amp,
+  //   currentNote: currentNote,
+  //   soundsLength: sounds.length,
+  //   filterFreq: filterFreq
+  // } );
 
 }
 
@@ -115,19 +170,71 @@ function toggleSound( toggle ) {
 
 }
 
-function dropSound( x, y ) {
+function getSourceClicked( mousePos ) {
+
+  for ( let sound of sounds ) {
+    console.log( 'mousepos from sounds = ', mousePos.dist( sound.pos ))
+    if ( mousePos.dist( sound.pos ) < soundSize )
+      return sound;
+  }
+
+  return undefined;
+
+}
+
+function dropSound( pos ) {
 
     sounds.push({
-        pos: createVector( x, y )
+        pos: createVector( pos.x, pos.y )
     })
 
     console.log( { sounds: sounds } );
 
 }
 
+function removeSound( sound ) {
+
+  const index = sounds.indexOf( sound );
+
+  // if ( index == currentNote ) {
+  //   currentNote--;
+  // } else if ( index == nextNote ) {
+  //   nextNote++;
+  // }
+
+  sounds.splice( index, 1 );
+
+}
+
 function clearSounds() {
 
   sounds = [];
-  currentNote = 0;
+  noteCounter = 0;
+  distToNextNoteInMs = 1000;
+}
 
+function getNewNotes( count, sounds ) {
+
+  const nextNote = ( count + 1 ) % sounds.length;
+
+  return {
+    currentNote: sounds[ count ] ? count : count - 1,
+    nextNote   : sounds[ nextNote ] ? nextNote : nextNote + 1
+  }
+
+}
+
+function startTimer() {
+  startTime = Date.now();
+  oldTime = Date.now();
+}
+
+function getElapsedTime() {
+  return Date.now() - startTime;
+}
+
+function getDelta() {
+  const delta = Date.now() - oldTime;
+  oldTime = Date.now();
+  return delta;
 }

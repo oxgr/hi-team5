@@ -25,7 +25,7 @@ let localAgent;
 
 let world;
 
-let circlePos;
+let slowCirclePos, slowCircleRadius;
 
 function preload() {
 
@@ -71,7 +71,7 @@ function setup() {
 
   soundSetup();
 
-  circlePos = createVector( width/2, height/2 );
+  slowCirclePos = createVector( width/2, height/2 );
 
 }
 
@@ -91,13 +91,13 @@ function draw() {
   noStroke();
 
   // draw slow circle
-  const radius = 100
+  slowCircleRadius = 100
   fill( 255, 100 );
-  circle( circlePos.x, circlePos.y, radius * 2 );
+  circle( slowCirclePos.x, slowCirclePos.y, slowCircleRadius * 2 );
   
   // Run these methods for every agent in the world
   for ( let agent of world.agents ) {
-    const speed = agent.checkSpace( circlePos, radius )
+    const speed = agent.checkSpace( slowCirclePos, slowCircleRadius )
     agent.move( speed );
     agent.show();
   }

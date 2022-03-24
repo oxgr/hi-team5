@@ -3,11 +3,21 @@
 */
 function mouseClicked() {
   
-  localAgent.updateTarget( {x: mouseX, y: mouseY });
+  const mousePos = createVector( mouseX, mouseY );
+  // mousePos.set( mouseX, mouseY );
+
+  localAgent.updateTarget( mousePos );
   
   socket.emit( 'update', localAgent.getData() );
 
-  dropSound( localAgent.pos.x, localAgent.pos.y );
+  const soundClicked = getSourceClicked( mousePos );
+
+  if ( soundClicked ) {
+    removeSound( soundClicked );
+  } else {
+    dropSound( localAgent.pos );
+  }
+  
   
 }
 
