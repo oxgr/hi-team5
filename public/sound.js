@@ -245,8 +245,6 @@ function getSoundClicked( mousePos ) {
  */
 function dropSound( pos ) {
 
-  
-
   if ( soundFile.buffer != null ) {
 
     const newSoundFile = new p5.SoundFile();
@@ -257,7 +255,7 @@ function dropSound( pos ) {
         // sound: soundFile,
         note: random( 50, 80 )
     });
-    
+
   }
 
 

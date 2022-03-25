@@ -34,6 +34,7 @@ class SoundAgent extends Agent {
                 recorder.stop();
 
                 this.state++;
+                // soundFile.play();
 
             } else if (this.state === 2) {
 

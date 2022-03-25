@@ -10,25 +10,42 @@ let p1, p2;
 
 let lineArr;
 
+let lineCol, cursorCol;
+
 let cnv;
+
+let loop;
+
+let playing;
 
 function setup() {
 
-    cnv = createCanvas( windowWidth, windowHeight );
+    cnv = createCanvas( 400, 400 );
 
     background( 'azure' )
 
     // synth = new p5.MonoSynth();
 
+    // osc = new p5.SinOsc();
+
+    reverb = new p5.Reverb();
     osc = new p5.SinOsc();
+    osc.disconnect(); 
+    reverb.process(osc, 3, 2, false);
 
     p1 = createVector();
     p2 = createVector();
 
     lineArr = [];
 
-    strokeWeight( 2 );
-    stroke( 'pink' );
+    lineCol = 'pink';
+    cursorCol = 'red';
+
+    strokeWeight( 6 );
+    stroke( lineCol );
+
+    loop = false;
+    playing = false;
 
 }
 
@@ -65,7 +82,7 @@ function keyPressed() {
     switch( keyCode ) {
 
         case 32:
-            playDrawing();
+            if ( !playing ) playDrawing( loop );
             break;
 
         case BACKSPACE:
@@ -73,22 +90,63 @@ function keyPressed() {
             background( 'azure' );
             break;
 
+        case 65:
+            loop = !loop;
+            break;
+
     }
 
 }
 
-function playDrawing() {
 
-    loadPixels();
+async function playDrawing( loop ) {
 
-    osc.start();
+    // let osc = new p5.SinOsc();
+
+    playing = true;
     
-    for (let i = 0; i < width; i += 4) {
+    osc.start();
 
-        for ( let j = 0; j < height; j++ ) {
-            
-        }
+    osc.amp( 0.1 );
+
+    for ( let i = 0; i < lineArr.length - 1; i++ ) {
+
+        const p = lineArr[ i ];
+        const pn = lineArr[ i + 1 ];
+
+        stroke( cursorCol );
+        point( p.x, p.y );
+        // cnv.line( p.x, p.y, pn.x, pn.y );
+
+        const d = dist( p.x, p.y, pn.x, pn.y );
+        const amp = constrain( map( d, 0, 100, 0, 1 ), 0, 1 );
+
+        reverb.drywet( map( p.x, 0, width, 0, 1 ) );
+
+        // osc.amp( amp );
+        osc.freq( 1000 - p.y * 2 );
+        await sleep( 10 );
+
+        stroke( lineCol );
+        point( p.x, p.y );
+        // cnv.line( p.x, p.y, pn.x, pn.y );
 
     }
 
+    osc.stop();
+
+    // osc = null;
+
+    playing = false;
+
+    if ( loop ) playDrawing( loop );
+
+}
+
+// a custom 'sleep' or wait' function, that returns a Promise that resolves only after a timeout
+function sleep(millisecondsDuration)
+{
+  return new Promise((resolve) => {
+    setTimeout(resolve, millisecondsDuration);
+  })
 }
