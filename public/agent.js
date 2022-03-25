@@ -1,12 +1,12 @@
 class Agent {
   
-  clicked(){
-    let d=dist(mouseX,mouseY,this.pos.x,this.pos.y);
-    if(d<this.radius){
-    mySound.play();
-      console.log("clicked on the bubble!");
-    }
-  }
+  // clicked(){
+  //   let d=dist(mouseX,mouseY,this.pos.x,this.pos.y);
+  //   if(d<this.radius){
+  //   mySound.play();
+  //     console.log("clicked on the bubble!");
+  //   }
+  // }
   constructor( x, y, color ) {
     
     this.color  = color;

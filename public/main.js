@@ -19,8 +19,6 @@ data = {
 */
 let mic,recorder,soundFile;
 
-let state=0;
-
 let mySound;
 
 let socket;

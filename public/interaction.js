@@ -12,14 +12,22 @@ function mouseClicked() {
 
   const soundClicked = getSoundClicked(mousePos);
 
-  if (soundClicked) {
-    removeSound(soundClicked);
-  } else {
-    dropSound(localAgent.pos);
-  }
+  
 
-  localAgent.clicked();
-  localSoundAgent.Pressed();
+  if ( localSoundAgent.checkIfClicked() ) {
+    
+    localSoundAgent.pressed();
+
+  } else {
+
+    if (soundClicked) {
+      removeSound(soundClicked);
+    } else {
+      dropSound(localAgent.pos);
+    }
+
+  }
+  
 
 }
 

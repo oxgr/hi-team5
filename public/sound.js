@@ -190,7 +190,9 @@ function playNote( currentNote ) {
   envelope.setRange( amp, 0 );
   
   // Play the note
-  envelope.play(osc, 0, 0.1);
+  // envelope.play(osc, 0, 0.1);
+  if ( sounds[ currentNote ].sound && sounds[ currentNote ].sound.buffer != null )
+    sounds[ currentNote ].sound.play();
 
   // console.log( {
   //   amp: amp,
@@ -243,10 +245,22 @@ function getSoundClicked( mousePos ) {
  */
 function dropSound( pos ) {
 
+  
+
+  if ( soundFile.buffer != null ) {
+
+    const newSoundFile = new p5.SoundFile();
+    newSoundFile.setBuffer( [soundFile.buffer.getChannelData(0)] )
     sounds.push({
         pos: createVector( pos.x, pos.y ),
+        sound:  newSoundFile,
+        // sound: soundFile,
         note: random( 50, 80 )
-    })
+    });
+    
+  }
+
+
 }
 
 /**
