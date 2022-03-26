@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 const server = app.listen( process.env.PORT || 3000, () => {
-console.log('Server running! Listening on ' + process.env.PORT )
+console.log('Server running! Listening on localhost:' + ( process.env.PORT || 3000 ) )
 });
 
 app.use( express.static( 'public' ) );
@@ -75,3 +75,35 @@ function newConnection( socket ) {
   //
   
 }
+
+// For auto-updating Glitch with Github pushes
+
+const cmd = require('node-cmd');
+const crypto = require('crypto'); 
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
+const onWebhook = (req, res) => {
+  let hmac = crypto.createHmac('sha1', process.env.SECRET);
+  let sig  = `sha1=${hmac.update(JSON.stringify(req.body)).digest('hex')}`;
+
+  if (req.headers['x-github-event'] === 'push' && sig === req.headers['x-hub-signature']) {
+    cmd.run('chmod 777 ./git.sh'); 
+    
+    cmd.get('./git.sh', (err, data) => {  
+      if (data) {
+        console.log(data);
+      }
+      if (err) {
+        console.log(err);
+      }
+    })
+
+    cmd.run('refresh');
+  }
+
+  return res.sendStatus(200);
+}
+
+app.post('/git', onWebhook);

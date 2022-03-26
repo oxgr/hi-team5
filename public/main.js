@@ -25,6 +25,13 @@ let localAgent;
 
 let world;
 
+function preload() {
+
+  // sprite = loadImage( './assets/sprite.png' );
+  // json = loadJSON( '[...].json')
+
+}
+
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
@@ -44,8 +51,8 @@ function setup() {
   
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
-  
-// Initialises thisAgent with a random position and color
+
+  // Initialises thisAgent with a random position and color
   localAgent = new Agent( random( width), random( height ), randomColor );
   
   // Adds thisAgent to the local world.
