@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.js"></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <video class="input_video"></video>
+    <!-- <canvas class="output_canvas" width="1280px" height="720px"></canvas> -->
+  </div>
+
+  <script >
+    const videoElement = document.getElementsByClassName('input_video')[0];
+    // const canvasElement = document.getElementsByClassName('output_canvas')[0];
+    // const canvasCtx = canvasElement.getContext('2d');
+
+    let count = 0;
+
+    let prev, target;
+    
+    function onResults(results) {
+        background( 'pink' );
+        const lerpSpeed = 0.8;
+
+    //   image(
+    //       results.image, 0, 0);
+      if (results.multiHandLandmarks) {
+        for (const landmarks of results.multiHandLandmarks) {
+
+            let p, w;
+
+            const j = results.multiHandLandmarks.indexOf( landmarks );
+
+            for( let i = 0; i < landmarks.length; i ++ ) {
+
+                const newx = map( landmarks[ i ].x, 0, 1, 0, 1280);
+                const newy = map( landmarks[ i ].y, 0, 1, 0, 720);
+                const size = constrain( map( landmarks[ i ].z, -0.1, 0.1, 50, 0), 0, 100 );
+                
+                prev[ j ][ i ].lerp( newx, newy, 0, lerpSpeed );
+
+                const x = prev[ j ][ i ].x;
+                const y = prev[ j ][ i ].y;
+                
+                // Drawing joints
+                ellipse( x, y, size );
+
+                //// Drawing lines between joints
+
+                // Set wrist position
+                if ( i == 0 ) w = { x: x, y: y };
+
+                // Draw line connecting joints, but *not* connecting finger tip to next finger base
+                if ( i > 0 && ( ( i - 1 ) % 4 != 0 )) line( p.x, p.y, x, y );
+
+                // Set this point as previous point.
+                p = { x: x, y: y };
+
+                // 
+                if ( i % 4 == 0 ) p = {...w};
+                
+            }
+        }
+
+        count++;
+        if ( count % 120 == 0 ) console.log( results );
+      }
+    }
+
+    // function onResults(results) {
+    //     count++;
+    //   canvasCtx.save();
+    //   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    //   canvasCtx.drawImage(
+    //       results.image, 0, 0, canvasElement.width, canvasElement.height);
+    //   if (results.multiHandLandmarks) {
+    //     for (const landmarks of results.multiHandLandmarks) {
+    //       drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
+    //                      {color: '#00FF00', lineWidth: 5});
+    //       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+    //     }
+    //     if ( count % 120 == 0 ) console.log( results );
+    //   }
+    //   canvasCtx.restore();
+    // }
+    
+    
+
+        
+
+
+    function setup() {
+        createCanvas( 1280, 720 );
+        background( 'pink' );
+        noLoop();
+        
+        // noStroke();
+        strokeWeight( 3 );
+        stroke('cyan');
+        fill( 'red' );
+
+        prev = [];
+        for( let i = 0; i < 2; i++ ) {
+            prev[i] = [];
+            for( let j = 0; j < 21; j++ ) {
+                prev[i][j] = createVector();
+            }
+        }
+        target = createVector();
+
+
+        const hands = new Hands({locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        }});
+        hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+        });
+        hands.onResults(onResults);
+        
+        const camera = new Camera(videoElement, {
+        onFrame: async () => {
+            await hands.send({image: videoElement});
+        },
+        width: 1280,
+        height: 720
+        });
+        camera.start();
+    }
+
+    function draw() {
+
+    }
+    </script>
+
+</body>
+</html>
