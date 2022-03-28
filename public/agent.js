@@ -4,6 +4,8 @@ let speed;
 let sphx;
 let sphy;
 let frameSpeed;
+let colorPicker;
+let switcher = false;
 class Agent {
 
   constructor( x, y, color) {
@@ -14,6 +16,9 @@ class Agent {
     
     //set the size of the sprite
     this.size =random(20,50);
+    this.colorPicker = round(random(0,8));
+    this.choseColor();
+
 
     //map functions
     //takes the size of the sphere and makes smaller spheres faster and bigger spheres slower
@@ -49,6 +54,41 @@ class Agent {
     spheres.add(this.sphere);
 
   }
+  choseColor(){
+    console.log("Switcher Started");
+        switch(this.colorPicker){
+      case 0:
+        sequenceAnimation=sphereBlue;
+        break;
+      case 1:
+        sequenceAnimation=sphereBrown;
+        break;
+      case 2:
+        sequenceAnimation=sphereGreen;
+        break;
+      case 3:
+        sequenceAnimation=sphereOrange;
+        break;
+      case 4:
+        sequenceAnimation=spherePink;
+        break;
+      case 5:
+        sequenceAnimation=spherePurple;
+        break;
+      case 6:
+        sequenceAnimation=sphereRed;
+        break;
+      case 7:
+        sequenceAnimation=sphereYellow;
+        break;
+      case 8:
+        sequenceAnimation=sphereRainbow;
+        break;
+    }
+    console.log("Switcher Stoped");
+  }
+
+
   
   /**
   * Moves position one step towards the target. Right now, this is done by lerp()[https://p5js.org/reference/#/p5.Vector/lerp]
@@ -65,8 +105,9 @@ class Agent {
   show() {
 
     //creates am ellipse that will follow the sphere sprite's x,y position
-    fill( this.color );
-    ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
+    drawSprites();
+    //fill( this.color );
+    //ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
 
     //the type of collision we ant to use
     this.sphere.bounce(spheres);
@@ -89,8 +130,6 @@ class Agent {
     this.target.y = data.y;
     
   }
-
-
 
   /**
   * Creates a separate data object to send to server with just the minimum amount of information. Used to send local objects like thisAgent.
