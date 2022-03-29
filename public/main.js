@@ -77,8 +77,13 @@ spheres = new Group();
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
 
+  // set the size
+  const size=random(20,50);
+
+  const sColor=round(random(0,8));
+
   // Initialises thisAgent with a random position and color
-  localAgent = new Agent( random( width), random( height ), randomColor);
+  localAgent = new Agent( random( width), random( height ), randomColor, size, sColor);
   
   // Adds thisAgent to the local world.
   world.agents.push( localAgent );
@@ -111,9 +116,8 @@ function draw() {
   for ( let agent of world.agents ) {
     agent.move( 0.1 );
     agent.show();
-    //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
   //draw every sprite that exists into the world
-  
+  drawSprites();
   
 }
