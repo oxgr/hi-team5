@@ -55,8 +55,6 @@ function newConnection( socket ) {
     
     socket.broadcast.emit( 'add', data );
     socket.data.color = data.color;
-    socket.data.size = data.size;
-    socket.data.sColor = data.sColor;
     world.agents.push(data);
     
   });

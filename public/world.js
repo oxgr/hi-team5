@@ -18,13 +18,10 @@ class World {
     * @param Object data A packet of data received from the server. Contains a color to id the agent and x, y properties.
     */
   addAgent( data ) {
-    var tmp = data.size;
-    if(data.size!== undefined){
-    this.agents.push( new Agent( data.x, data.y, data.color, data.size, data.sColor) )
-    console.log(this.sphere);
-    console.log( '[WORLD]: Agent %s added!', data.color, data.size, data.sColor );
-  }
-  console.log(this.agents.length);
+
+    this.agents.push( new Agent( data.x, data.y, data.color) )
+    console.log( '[WORLD]: Agent %s added!', data.color );
+
   }
   
   /**
@@ -41,12 +38,11 @@ class World {
     if ( index > -1 ) { 
       
       this.agents.splice( index, 1 );
-      console.log(this.sphere);
-      console.log('[WORLD]: Agent %s removed!', data.color, data.size, data.sColor );
+      console.log('[WORLD]: Agent %s removed!', data.color );
       
     } else {
       
-      console.log('[WORLD]: Tried to remove, but no agent found.', data.color, data.size, data.sColor );
+      console.log('[WORLD]: Tried to remove, but no agent found.', data.color );
       
     } 
     
@@ -62,7 +58,6 @@ class World {
     for ( let data of newWorld ) {
       // if ( data.color != localAgent.color )
         this.addAgent( data );
-      
     }
 
   }
