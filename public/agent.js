@@ -31,7 +31,7 @@ class Agent {
     //set the size of the sprite
     this.size = random(20, 50);
     this.colorPicker = round(random(0, 8));
-    this.choseColor();
+    //this.choseColor();
 
 
     //map functions
@@ -56,10 +56,10 @@ class Agent {
     this.sphere.mass = this.size / 20;
 
     //set the animation speed (default is 4)
-    sequenceAnimation.frameDelay = round(this.frameSpeed);
+    spinningAnimation.frameDelay = round(this.frameSpeed);
 
     //add the animation to the sphere
-    this.sphere.addAnimation("fun", sequenceAnimation);
+    this.sphere.addAnimation("fun", spinningAnimation);
 
     // how fast the sphere allowed to travel
     this.sphere.maxSpeed = this.speed;
@@ -119,13 +119,14 @@ class Agent {
   show() {
 
     fill(this.color);
-    // ellipse(this.pos.x, this.pos.y, this.radius);
+    //ellipse(this.pos.x, this.pos.y, this.radius);
 
 
-    //creates am ellipse that will follow the sphere sprite's x,y position
-    drawSprites();
+    //creates an ellipse that will follow the sphere sprite's x,y position
+    
     //fill( this.color );
-    //ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
+    ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
+    drawSprites(spheres);
 
     //the type of collision we ant to use
     this.sphere.bounce(spheres);

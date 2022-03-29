@@ -32,16 +32,7 @@ let mySound;
 
 //sphere sprite and animation variables
 var sphere;
-var sequenceAnimation;
-var sphereBrown;
-var shpereBlue;
-var sphereGreen;
-var sphereOrange;
-var spherePink;
-var spherePurple;
-var sphereRainbow;
-var sphereRed;
-var sphereYellow;
+var spinningAnimation
 let spheres;
 let bg;
 
@@ -52,15 +43,8 @@ function preload() {
   mySound = loadSound('assets/doorbell.mp3');
 
   //loading the images and animation for the sphere sprites
-    sphereBlue = loadAnimation("./BallSprite/Blue/1.png","./BallSprite/Blue/8.png");
-    sphereBrown = loadAnimation("./BallSprite/Brown/1.png","./BallSprite/Brown/8.png");
-    sphereGreen = loadAnimation("./BallSprite/Green/1.png","./BallSprite/Green/8.png");
-    sphereOrange = loadAnimation("./BallSprite/Orange/1.png","./BallSprite/Orange/8.png");
-    spherePink = loadAnimation("./BallSprite/Pink/1.png","./BallSprite/Pink/8.png");
-    spherePurple = loadAnimation("./BallSprite/Purple/1.png","./BallSprite/Purple/8.png");
-    sphereRainbow = loadAnimation("./BallSprite/Rainbow/1.png","./BallSprite/Rainbow/8.png");
-    sphereRed = loadAnimation("./BallSprite/Red/1.png","./BallSprite/Red/8.png");
-    sphereYellow = loadAnimation("./BallSprite/Yellow/1.png","./BallSprite/Yellow/8.png");
+    spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
+
    bg=loadImage("./assets/bg.png");
 
 }
