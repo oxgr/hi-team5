@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>balls</title>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #wrap {
+        height: 800px;
+        width: 1300px;
+        border: 1px solid red;
+        
+        position: relative;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+      p {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: white;
+        font-size: 25px;
+        text-align: center;
+        line-height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+    </div>
+  </body>
+  <!--<script src="js/common.js" type="text/javascript" charset="utf-8"></script>-->
+  <script type="text/javascript">
+    function randomNum(m, n) {
+    return Math.floor(Math.random() * (n - m + 1) + m);
+  }
+  /**
+  
+   */
+  function randomColor() {
+    var r = randomNum(0, 255);
+    var g = randomNum(0, 255);
+    var b = randomNum(0, 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+  }
+ 
+  var wrapDiv = document.getElementById("wrap");
+  
+  var balls = [];
+  
+  function createBalls() {
+    for (var i = 0; i < 20; i++) {
+      var ball = document.createElement("p");
+      
+      ball.x = randomNum(0, 1200);
+      ball.y = randomNum(0, 700);
+      
+      ball.speed = randomNum(2, 5);
+      
+      if (Math.random() - 0.5 > 0) {
+        ball.xflag = true;
+      } else {
+        ball.xflag = false;
+      }
+      if (Math.random() - 0.5 > 0) {
+        ball.yflag = true;
+      } else {
+        ball.yflag = false;
+      }
+     
+      ball.style.backgroundColor = randomColor();
+      ball.innerHTML = i + 1;
+      
+      wrapDiv.appendChild(ball);
+      
+      balls.push(ball);
+    
+      
+    }
+  }
+  createBalls();
+  
+  function moveBalls(ballObj) {
+    setInterval(function() {
+      ballObj.style.top = ballObj.y + "px";
+      ballObj.style.left = ballObj.x + "px";
+      
+      if (ballObj.yflag) {
+        
+        ballObj.y += ballObj.speed;
+        if (ballObj.y >= 800 - ballObj.offsetWidth) {
+          ballObj.y = 800 - ballObj.offsetWidth;
+          ballObj.yflag = false;
+        }
+      } else {
+        
+        ballObj.y -= ballObj.speed;
+        if (ballObj.y <= 0) {
+          ballObj.y = 0;
+          ballObj.yflag = true;
+        }
+      }
+      if (ballObj.xflag) {
+       
+        ballObj.x += ballObj.speed;
+        if (ballObj.x >= 1300 - ballObj.offsetHeight) {
+          ballObj.x = 1300 - ballObj.offsetHeight;
+          ballObj.xflag = false;
+        }
+      } else {
+        
+        ballObj.x -= ballObj.speed;
+        if (ballObj.x <= 0) {
+          ballObj.x = 0;
+          ballObj.xflag = true;
+        }
+      }
+      crash(ballObj);
+    }, 10);
+  }
+  var x1, y1, x2, y2;
+  
+  function crash(ballObj) {
+    
+    x1 = ballObj.x;
+    y1 = ballObj.y;
+    for (var i = 0; i < balls.length; i++) {
+      
+      if (ballObj != balls[i]) {
+        x2 = balls[i].x;
+        y2 = balls[i].y;
+        
+        if (Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + 800 <= Math.pow(ballObj.offsetWidth + balls[i].offsetWidth, 2)) {
+          
+          if (ballObj.x < balls[i].x) {
+            if (ballObj.y < balls[i].y) {
+              
+              ballObj.yflag = false;
+              ballObj.xflag = false;
+            } else if (ballObj.y > balls[i].y) {
+              
+              ballObj.xflag = false;
+              ballObj.yflag = true;
+            } else {
+              
+              ballObj.xflag = false;
+            }
+          } else if (ballObj.x > balls[i].x) {
+            if (ballObj.y < balls[i].y) {
+              
+              ballObj.yflag = false;
+              ballObj.xflag = true;
+            } else if (ballObj.y > balls[i].y) {
+              
+              ballObj.xflag = true;
+              ballObj.yflag = true;
+            } else {
+              
+              ballObj.xflag = true;
+            }
+          } else if (ballObj.y > balls[i].y) {
+            
+            ballObj.yflag = true;
+          } else if (ballObj.y < balls[i].y) {
+            
+            ballObj.yflag = false;
+          }
+        }
+      }
+    }
+  }
+  for (var i = 0; i < balls.length; i++) {
+    
+    moveBalls(balls[i]);
+  }
+
+     </script>
+</html>
