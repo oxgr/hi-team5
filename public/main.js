@@ -34,6 +34,7 @@ function preload() {
 
   // sprite = loadImage( './assets/sprite.png' );
   // json = loadJSON( '[...].json')
+
   soundFormats('mp3', 'ogg');
   mySound = loadSound('assets/doorbell.mp3');
 }
@@ -109,6 +110,7 @@ function setup() {
 function draw() {
   
   background('#d3e8f2');
+  
   localSoundAgent.show();
   // Optionally draw background here.
   // world.drawBackground();
