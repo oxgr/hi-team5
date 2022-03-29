@@ -19,9 +19,16 @@ data = {
 */
 
 //world definition and server variables
+
 let socket;
 let localAgent;
 let world;
+
+
+let slowCirclePos, slowCircleRadius;
+let localSoundAgent;
+let mic,recorder,soundFile;
+let mySound;
 
 //sphere sprite and animation variables
 var sphere;
@@ -38,7 +45,11 @@ var sphereYellow;
 let spheres;
 let bg;
 
+
 function preload() {
+
+  soundFormats('mp3', 'ogg');
+  mySound = loadSound('assets/doorbell.mp3');
 
   //loading the images and animation for the sphere sprites
     sphereBlue = loadAnimation("./BallSprite/Blue/1.png","./BallSprite/Blue/8.png");
@@ -51,15 +62,33 @@ function preload() {
     sphereRed = loadAnimation("./BallSprite/Red/1.png","./BallSprite/Red/8.png");
     sphereYellow = loadAnimation("./BallSprite/Yellow/1.png","./BallSprite/Yellow/8.png");
    bg=loadImage("./assets/bg.png");
+
 }
 
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
-function setup() {
+function setup() {  
+  
+  mic = new p5.AudioIn();
+
+  // prompts user to enable their browser mic
+  mic.start();
+
+  // create a sound recorder
+  recorder = new p5.SoundRecorder();
+
+  // connect the mic to the recorder
+  recorder.setInput(mic);
+
+  // this sound file will be used to
+  // playback & save the recording
+  soundFile = new p5.SoundFile();
+
 
 //new group added for the sphere sprites to be held. Works like an array
 spheres = new Group();
+
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
@@ -79,8 +108,14 @@ spheres = new Group();
   // Initialises thisAgent with a random position and color
   localAgent = new Agent( random( width), random( height ), randomColor);
   
+  localSoundAgent = new SoundAgent( 100, 100, 'green' );
+ 
+
+  
   // Adds thisAgent to the local world.
-  world.agents.push( localAgent );
+  world.addAgent( localAgent );
+  
+  world.agents.push( localSoundAgent );
   
   // Retrieves current world from the server.
   socket.emit( 'getAgentsInWorld', 0 );
@@ -91,7 +126,12 @@ spheres = new Group();
   // Packages thisAgent and sends it to other client worlds.
   socket.emit( 'update', localAgent.getData() );
 
+  soundSetup();
+
+  slowCirclePos = createVector( width/2, height/2 );
+
 }
+
 
 /**
 *  p5.js function. Called continuously. Ideally runs 60 times per second i.e. 60 fps.
@@ -100,19 +140,31 @@ function draw() {
   
   background(bg);
   
+  localSoundAgent.show();
   // Optionally draw background here.
   // world.drawBackground();
+
+  localAgent.updateTarget( {x: mouseX, y: mouseY });
   
   // Disable the outline of the shape.
   noStroke();
+
+  // draw slow circle
+  slowCircleRadius = 100
+  fill( 255, 100 );
+  circle( slowCirclePos.x, slowCirclePos.y, slowCircleRadius * 2 );
   
   // Run these methods for every agent in the world
   for ( let agent of world.agents ) {
-    agent.move( 0.1 );
+    const speed = agent.checkSpace( slowCirclePos, slowCircleRadius )
+    agent.move( speed );
     agent.show();
+  
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
   //draw every sprite that exists into the world
+  
+  soundDraw();
   
   
 }

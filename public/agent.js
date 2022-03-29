@@ -9,10 +9,13 @@ let switcher = false;
 class Agent {
 
   constructor( x, y, color) {
+    
     //initial Variable setup from main
     this.color  = color;
     this.pos    = createVector( x, y );
     this.target = createVector( x, y );
+    this.radius = 50;
+  
     
     //set the size of the sprite
     this.size =random(20,50);
@@ -104,6 +107,10 @@ class Agent {
   */
   show() {
 
+    fill( this.color );
+    ellipse( this.pos.x, this.pos.y, this.radius );
+    
+
     //creates am ellipse that will follow the sphere sprite's x,y position
     drawSprites();
     //fill( this.color );
@@ -117,6 +124,19 @@ class Agent {
 
      // camera.position.x = this.sphere.position.x;
      // camera.position.y = this.sphere.position.y;
+
+  }
+  
+  /**
+   * 
+   * @param {*} data 
+   */
+  checkSpace( vec, radius ) {
+    if( this.pos.dist( vec ) < radius ) {
+      return 0.01;
+    } else {
+      return 0.1;
+    }
   }
 
   /**
