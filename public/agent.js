@@ -5,7 +5,22 @@ let sphx;
 let sphy;
 let frameSpeed;
 let colorPicker;
+<<<<<<< HEAD
 let switcher = false;
+=======
+
+    function sphereLight(collider,sp){
+      let sHold;
+    fill( 'rgba(100%,100%,100%,0.5)');
+    if(collider.scale>sp.scale){
+      sHold=collider.scale*30;
+    }
+    else{sHold=sp.scale*30;}
+    ellipse( sp.position.x,sp.position.y,sHold+20);
+    //collider.remove();
+  }
+
+>>>>>>> parent of 2146338 (Unified sizes and unified colours)
 class Agent {
 
   constructor( x, y, color) {
