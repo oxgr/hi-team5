@@ -18,25 +18,49 @@ data = {
 
 */
 
-
+//world definition and server variables
 let socket;
-
 let localAgent;
-
 let world;
+
+//sphere sprite and animation variables
+var sphere;
+var sequenceAnimation;
+var sphereBrown;
+var shpereBlue;
+var sphereGreen;
+var sphereOrange;
+var spherePink;
+var spherePurple;
+var sphereRainbow;
+var sphereRed;
+var sphereYellow;
+let spheres;
+let bg;
 
 function preload() {
 
-  // sprite = loadImage( './assets/sprite.png' );
-  // json = loadJSON( '[...].json')
-
+  //loading the images and animation for the sphere sprites
+    sphereBlue = loadAnimation("./BallSprite/Blue/1.png","./BallSprite/Blue/8.png");
+    sphereBrown = loadAnimation("./BallSprite/Brown/1.png","./BallSprite/Brown/8.png");
+    sphereGreen = loadAnimation("./BallSprite/Green/1.png","./BallSprite/Green/8.png");
+    sphereOrange = loadAnimation("./BallSprite/Orange/1.png","./BallSprite/Orange/8.png");
+    spherePink = loadAnimation("./BallSprite/Pink/1.png","./BallSprite/Pink/8.png");
+    spherePurple = loadAnimation("./BallSprite/Purple/1.png","./BallSprite/Purple/8.png");
+    sphereRainbow = loadAnimation("./BallSprite/Rainbow/1.png","./BallSprite/Rainbow/8.png");
+    sphereRed = loadAnimation("./BallSprite/Red/1.png","./BallSprite/Red/8.png");
+    sphereYellow = loadAnimation("./BallSprite/Yellow/1.png","./BallSprite/Yellow/8.png");
+   bg=loadImage("./assets/bg.png");
 }
 
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
 function setup() {
-  
+
+//new group added for the sphere sprites to be held. Works like an array
+spheres = new Group();
+
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
   
@@ -53,7 +77,7 @@ function setup() {
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
 
   // Initialises thisAgent with a random position and color
-  localAgent = new Agent( random( width), random( height ), randomColor );
+  localAgent = new Agent( random( width), random( height ), randomColor);
   
   // Adds thisAgent to the local world.
   world.agents.push( localAgent );
@@ -74,7 +98,7 @@ function setup() {
 */
 function draw() {
   
-  background('#d3e8f2');
+  background(bg);
   
   // Optionally draw background here.
   // world.drawBackground();
@@ -86,6 +110,9 @@ function draw() {
   for ( let agent of world.agents ) {
     agent.move( 0.1 );
     agent.show();
+    //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
+  //draw every sprite that exists into the world
+  
   
 }
