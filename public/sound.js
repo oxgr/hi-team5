@@ -137,7 +137,7 @@ function soundDraw() {
   ringSprite.attractionPoint(1,soundTargetPos.x,soundTargetPos.y);
   ringSprite.maxSpeed=5;
   ringSprite.position=soundCursorPos;
-  ringSprite.bounce(spheres);
+  ringSprite.bounce(sprites);
   ringSprite.mass=0.05;
   ringSprite.visible=false;
 

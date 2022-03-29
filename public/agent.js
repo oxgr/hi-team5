@@ -45,25 +45,25 @@ class Agent {
 
     // Sprite creation
     //created a sprite with and x,y position and an x,y size position
-    this.sphere = createSprite(this.pos.x, this.pos.y, this.size, this.size);
+    this.sprite = createSprite(this.pos.x, this.pos.y, this.size, this.size);
 
     // how big is this sphere going to look?
-    this.sphere.scale = this.size / 30;
+    this.sprite.scale = this.size / 30;
 
     // how heavy is the sphere? Good for collisions
-    this.sphere.mass = this.size / 20;
+    this.sprite.mass = this.size / 20;
 
     //set the animation speed (default is 4)
     spinningAnimation.frameDelay = round(this.frameSpeed);
 
     //add the animation to the sphere
-    this.sphere.addAnimation("fun", spinningAnimation);
+    this.sprite.addAnimation("fun", spinningAnimation);
 
     // how fast the sphere allowed to travel
-    this.sphere.maxSpeed = this.speed;
+    this.sprite.maxSpeed = this.speed;
 
     //add the shpere to a group for collision purposes
-    spheres.add(this.sphere);
+    sprites.add(this.sprite);
 
   }
   
@@ -89,14 +89,14 @@ class Agent {
     
     //fill( this.color );
     
-    ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
-    drawSprites(spheres);
+    ellipse( this.sprite.position.x, this.sprite.position.y,this.size);
+    drawSprites(sprites);
 
-    //the type of collision we ant to use
-    this.sphere.bounce(spheres);
+    //the type of collision we want to use
+    this.sprite.bounce(sprites);
 
     //make the sphere move towards a specific point
-    this.sphere.attractionPoint(this.speed / 24, this.pos.x, this.pos.y);
+    this.sprite.attractionPoint(this.speed / 24, this.pos.x, this.pos.y);
   }
 
   /**

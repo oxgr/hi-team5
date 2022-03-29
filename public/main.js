@@ -31,9 +31,9 @@ let mic,recorder,soundFile;
 let mySound;
 
 //sphere sprite and animation variables
-var sphere;
+var sprite;
 var spinningAnimation
-let spheres;
+let sprites;
 let bg;
 var ringSprite;
 
@@ -72,7 +72,7 @@ function setup() {
 
 
 //new group added for the sphere sprites to be held. Works like an array
-spheres = new Group();
+sprites = new Group();
 
 
 
