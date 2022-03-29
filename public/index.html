@@ -3,24 +3,38 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Online Multiplayer</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/p5"></script>
 <!--     <script src="https://cdn.socket.io/4.4.1/socket.io.esm.min.js"></script> -->
-<!--     <script src="/socket.io/socket.io.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
-    
-    <script src="./socket-client.js"></script>
-    <script src="./world.js"></script>
-<!--     <script src="./environment.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="index.js"></script>
     <script src="./agent.js"></script>
     <script src="./sound.js"></script>
     <script src="./interaction.js"></script>
     <script src="./main.js"></script>
-    
+      <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        #canvas {
+            display: block;
+            background-color: antiquewhite;
+        }
+    </style>
   </head>
   <body>
     
   </body>
 </html>
+
+

@@ -9,9 +9,7 @@
   "dependencies": {
     "socket.io": "^4.4.1",
     "express": "^4.17.3",
-    "socket.io-client": "^4.4.1",
-    "node-cmd": "^5.0.0",
-    "body-parser": "^1.19.2"
+    "socket.io-client": "^4.4.1"
   },
   "engines": {
     "node": "12.x"
