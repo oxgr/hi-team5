@@ -5,7 +5,18 @@ let sphx;
 let sphy;
 let frameSpeed;
 let colorPicker;
-let switcher = false;
+
+    function sphereLight(collider,sp){
+      let sHold;
+    fill( 'rgba(100%,100%,100%,0.5)');
+    if(collider.scale>sp.scale){
+      sHold=collider.scale*30;
+    }
+    else{sHold=sp.scale*30;}
+    ellipse( sp.position.x,sp.position.y,sHold+20);
+    //collider.remove();
+  }
+
 class Agent {
 
   constructor( x, y, color) {
@@ -82,7 +93,10 @@ class Agent {
         sequenceAnimation=sphereYellow;
         break;
       case 8:
+        if(random(0,10)>7){
         sequenceAnimation=sphereRainbow;
+      }
+      else{sequenceAnimation=sphereBlue;}
         break;
     }
     console.log("Switcher Stoped");
@@ -110,14 +124,13 @@ class Agent {
     //ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
 
     //the type of collision we ant to use
-    this.sphere.bounce(spheres);
+    this.sphere.overlap(spheres,sphereLight);
 
     //make the sphere move towards a specific point
     this.sphere.attractionPoint(this.speed/25, this.pos.x, this.pos.y);
-
-     // camera.position.x = this.sphere.position.x;
-     // camera.position.y = this.sphere.position.y;
   }
+
+
 
   /**
   * Updates the position of an agent in the world. Tracks down the spcific agent by matching the color code, then updates the new xy values to the newPos vector.

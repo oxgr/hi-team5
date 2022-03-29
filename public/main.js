@@ -63,6 +63,7 @@ spheres = new Group();
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
+
   
   // Create a new world that includes information on agents and environment.
   world = new World();
