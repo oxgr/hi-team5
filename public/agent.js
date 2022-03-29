@@ -42,12 +42,10 @@ class Agent {
     this.frameSpeed = map(this.size, 20, 50, 4, 20);
 
     // sphere x and y coords. Determines where the spheres spawn/ start
-    this.sphx = random(0, width);
-    this.sphy = random(0, height);
 
     // Sprite creation
     //created a sprite with and x,y position and an x,y size position
-    this.sphere = createSprite(this.sphx, this.sphy, this.size, this.size);
+    this.sphere = createSprite(this.pos.x, this.pos.y, this.size, this.size);
 
     // how big is this sphere going to look?
     this.sphere.scale = this.size / 30;
@@ -68,42 +66,7 @@ class Agent {
     spheres.add(this.sphere);
 
   }
-  choseColor() {
-    console.log("Switcher Started");
-    switch (this.colorPicker) {
-      case 0:
-        sequenceAnimation = sphereBlue;
-        break;
-      case 1:
-        sequenceAnimation = sphereBrown;
-        break;
-      case 2:
-        sequenceAnimation = sphereGreen;
-        break;
-      case 3:
-        sequenceAnimation = sphereOrange;
-        break;
-      case 4:
-        sequenceAnimation = spherePink;
-        break;
-      case 5:
-        sequenceAnimation = spherePurple;
-        break;
-      case 6:
-        sequenceAnimation = sphereRed;
-        break;
-      case 7:
-        sequenceAnimation = sphereYellow;
-        break;
-      case 8:
-        sequenceAnimation = sphereRainbow;
-        break;
-    }
-    console.log("Switcher Stoped");
-  }
-
-
-
+  
   /**
   * Moves position one step towards the target. Right now, this is done by lerp()[https://p5js.org/reference/#/p5.Vector/lerp]
   */
@@ -125,6 +88,7 @@ class Agent {
     //creates an ellipse that will follow the sphere sprite's x,y position
     
     //fill( this.color );
+    
     ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
     drawSprites(spheres);
 
@@ -132,11 +96,7 @@ class Agent {
     this.sphere.bounce(spheres);
 
     //make the sphere move towards a specific point
-    this.sphere.attractionPoint(this.speed / 25, this.pos.x, this.pos.y);
-
-    // camera.position.x = this.sphere.position.x;
-    // camera.position.y = this.sphere.position.y;
-
+    this.sphere.attractionPoint(this.speed / 24, this.pos.x, this.pos.y);
   }
 
   /**

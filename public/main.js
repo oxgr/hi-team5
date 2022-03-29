@@ -35,6 +35,7 @@ var sphere;
 var spinningAnimation
 let spheres;
 let bg;
+var ringSprite;
 
 
 function preload() {
@@ -72,6 +73,7 @@ function setup() {
 
 //new group added for the sphere sprites to be held. Works like an array
 spheres = new Group();
+
 
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.

@@ -10,6 +10,8 @@ let sounds, soundSize;
 let notePeriodInMs;
 let cursorSpeed;
 
+let gravityPull = 5;
+
 /**
  * Called in main setup() once on load.
  */
@@ -57,11 +59,17 @@ function soundSetup() {
   notePeriodInMs = 1000;
   cursorSpeed = 0.05;
 
+
+ringSprite = createSprite(soundCursorPos.x, soundCursorPos.y, soundSize, soundSize);
 }
 
 /**
  * Called in draw() loop 60 fps.
  */
+ function ringBounced(ring,otherObject){
+  ring.maxSpeed=30;
+ }
+
 function soundDraw() {
 
   // Run this every after the timer goes past the note period
@@ -116,13 +124,22 @@ function soundDraw() {
   }
 
   // Move cursor slightly towards next note.
-  soundCursorPos.lerp( soundTargetPos, cursorSpeed );
+  //soundCursorPos.lerp( soundTargetPos, cursorSpeed );
 
   // Draw cursor with just a red stroke.
   noFill();
   stroke( 'red' );
   strokeWeight( 2 );
   ellipse( soundCursorPos.x, soundCursorPos.y, soundSize );
+  
+  //ringSprite.visible=false;
+  drawSprites();
+  ringSprite.attractionPoint(1,soundTargetPos.x,soundTargetPos.y);
+  ringSprite.maxSpeed=5;
+  ringSprite.position=soundCursorPos;
+  ringSprite.bounce(spheres);
+  ringSprite.mass=0.05;
+  ringSprite.visible=false;
 
 }
 
