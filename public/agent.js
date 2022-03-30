@@ -94,7 +94,7 @@ class Agent {
     drawSprites(sprites);
 
     //the type of collision we want to use
-    this.sprite.bounce(sprites,spriteCollided);
+    this.sprite.collide(sprites,spriteCollided);
 
     //make the sphere move towards a specific point
     this.sprite.attractionPoint(this.speed / 20, this.pos.x, this.pos.y);
