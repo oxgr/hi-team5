@@ -6,7 +6,7 @@ let sphy;
 let frameSpeed;
 let colorPicker;
 
-function sphereLight(collider, sp) {
+function spriteCollided(collider, sp) {
   let sHold;
   fill('rgba(100%,100%,100%,0.5)');
   if (collider.scale > sp.scale) {
@@ -36,7 +36,8 @@ class Agent {
 
     //map functions
     //takes the size of the sphere and makes smaller spheres faster and bigger spheres slower
-    this.speed = map(this.size, 20, 50, 5, 1);
+    //this.speed = map(this.size, 20, 50, 3, 1);
+    this.speed=3;
 
     // uses the size of the sphere to set an animation speed for each sphere
     this.frameSpeed = map(this.size, 20, 50, 4, 20);
@@ -93,10 +94,10 @@ class Agent {
     drawSprites(sprites);
 
     //the type of collision we want to use
-    this.sprite.bounce(sprites);
+    this.sprite.bounce(sprites,spriteCollided);
 
     //make the sphere move towards a specific point
-    this.sprite.attractionPoint(this.speed / 24, this.pos.x, this.pos.y);
+    this.sprite.attractionPoint(this.speed / 20, this.pos.x, this.pos.y);
   }
 
   /**
