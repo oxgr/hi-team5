@@ -10,8 +10,6 @@ let sounds, soundSize;
 let notePeriodInMs;
 let cursorSpeed;
 
-let gravityPull = 5;
-
 /**
  * Called in main setup() once on load.
  */
@@ -135,12 +133,20 @@ function soundDraw() {
   //ringSprite.visible=false;
   drawSprites();
   ringSprite.attractionPoint(1,soundTargetPos.x,soundTargetPos.y);
-  ringSprite.maxSpeed=5;
+  
   ringSprite.position=soundCursorPos;
   ringSprite.bounce(sprites);
   ringSprite.mass=0.05;
   ringSprite.visible=false;
 
+  if(dist(soundCursorPos.x,soundCursorPos.y,soundTargetPos.x,soundTargetPos.y)>10){
+    ringSprite.maxSpeed=5;
+  }
+  else{
+ringSprite.maxSpeed=0;
+soundCursorPos.y=soundTargetPos.y;
+soundCursorPos.x=soundTargetPos.x;
+}
 }
 
 /**
