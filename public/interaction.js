@@ -23,7 +23,12 @@ function mouseClicked() {
     if (soundClicked) {
       removeSound(soundClicked);
     } else {
-      dropSound(localAgent.pos);
+      const newSound = createSound( localAgent.pos );
+      if ( newSound ) {
+        dropSound( newSound );
+        socket.emit( 'newSound', newSound );
+        console.log( ' new sound emitted', newSound );
+      }
     }
 
   }
@@ -36,6 +41,7 @@ function mousePressed() {
   
 
 }
+
 
 function mouseDragged() {
 

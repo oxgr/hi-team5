@@ -31,8 +31,14 @@ function setupSocketListeners( socket, world ) {
   
   socket.on( 'agentsInWorld',   ( newWorld ) => world.addAgentsFromWorld( newWorld ) );
   
-  socket.on( 'update',  ( data ) => world.updateAgent( data ) );
+  socket.on( 'update', ( data ) => world.updateAgent( data ) );
   socket.on( 'add',    ( data ) => world.addAgent( data ));
-  socket.on( 'remove',     ( data ) => world.removeAgent( data ));
+  socket.on( 'remove', ( data ) => world.removeAgent( data ));
+
+  socket.on( 'newSound' , ( sound ) => { 
+    sound.buffer = new Float32Array( sound.buffer );
+    console.log( 'received new sound!', sound );
+    dropSound( sound );
+  });
   
 }

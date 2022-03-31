@@ -10,6 +10,10 @@ let sounds, soundSize;
 let notePeriodInMs;
 let cursorSpeed;
 
+let collideSound;
+
+let mic,recorder,soundFile;
+
 /**
  * Called in main setup() once on load.
  */
@@ -20,13 +24,45 @@ function soundSetup() {
 
   startTimer();
 
+  //
+
+  mic = new p5.AudioIn();
+
+  // prompts user to enable their browser mic
+  mic.start();
+
+  // create a sound recorder
+  recorder = new p5.SoundRecorder();
+
+  // connect the mic to the recorder
+  recorder.setInput(mic);
+
+  // this sound file will be used to
+  // playback & save the recording
+  soundFile = new p5.SoundFile();
+  soundFile.disconnect();
+
+  //
+
   filter = new p5.LowPass();
+
+  soundFormats('mp3', 'ogg');
+  collideSound = loadSound('assets/CollideSound.mp3');
+  collideSound.disconnect();
    
   osc = new p5.SinOsc();
 
   // Disconnect oscillator output, so we only hear the filter output.
   osc.disconnect();
   osc.connect( filter );
+
+  //
+
+  reverb = new p5.Reverb();
+  filter.disconnect();
+  reverb.process( filter, 1, 1);
+  reverb.process( collideSound, 3, 1);
+  reverb.process( soundFile, 3, 2);
 
   // Instantiate the envelope
   envelope = new p5.Env();
@@ -83,7 +119,7 @@ function soundDraw() {
     // update the interactive note period and cursor speed based on distance between cursor and next note.
     if ( sounds.length > 1 ) {
       const dist = sounds[ nextNote ].pos.dist( soundCursorPos );
-      notePeriodInMs = Math.floor( map( dist, 0, 1000, 0, 4000 ) );
+      notePeriodInMs = Math.floor( map( dist, 0, 1000, 0, 6000 ) );
       cursorSpeed = map( dist, 0, 1000, 0.1, 0.02);
     } else {
       notePeriodInMs = 1000;
@@ -146,7 +182,7 @@ function soundDraw() {
   ringSprite.position=soundCursorPos;
 
   if(ringSprite.bounce(sprites)){
-    mySound.play();
+    collideSound.play();
     console.log("bounced!")
   }
 
@@ -245,9 +281,10 @@ function playNote( currentNote ) {
   envelope.setRange( amp, 0 );
   
   // Play the note
-  // envelope.play(osc, 0, 0.1);
-  if ( sounds[ currentNote ].sound && sounds[ currentNote ].sound.buffer != null )
-    sounds[ currentNote ].sound.play();
+  envelope.play(osc, 0, 0.1);
+
+  if ( sounds[ currentNote ].soundFile && sounds[ currentNote ].soundFile.buffer != null )
+    sounds[ currentNote ].soundFile.play();
 
   // console.log( {
   //   amp: amp,
@@ -256,7 +293,7 @@ function playNote( currentNote ) {
   //   filterFreq: filterFreq
   // } );
 
-}
+} 
 
 /**
  * Toggles the oscillator to start and stop.
@@ -268,10 +305,39 @@ function toggleSound( toggle ) {
   if ( toggle ) {
     
     osc.start();
+    outputVolume( 1, 1 );
 
   } else {
 
     osc.stop();
+    outputVolume( 0, 1 );
+
+  }
+
+}
+
+function createSound( pos ) {
+
+  if ( soundFile.buffer != null ) {
+
+    const newSound = {
+  
+      pos: {
+        x: pos.x,
+        y: pos.y
+      },
+      buffer: soundFile.buffer.getChannelData(0),
+      note: random( 50, 80 )
+
+    }
+
+    console.log( '[SOUND]: New sound created.' );
+
+    return newSound;
+
+  } else {
+
+    console.log( '[SOUND]: Tried to create new sound, but no buffer found in soundFile.' );
 
   }
 
@@ -296,20 +362,25 @@ function getSoundClicked( mousePos ) {
 
 /**
  * Adds a new sound into the sounds array at the position given.
- * @param {p5.Vector} pos 
+ * @param {object} sound 
  */
-function dropSound( pos ) {
+function dropSound( sound ) {
 
-  if ( soundFile.buffer != null ) {
+  if ( sound.buffer != null ) {
 
     const newSoundFile = new p5.SoundFile();
-    newSoundFile.setBuffer( [soundFile.buffer.getChannelData(0)] )
-    sounds.push({
-        pos: createVector( pos.x, pos.y ),
-        sound:  newSoundFile,
-        // sound: soundFile,
-        note: random( 50, 80 )
-    });
+    newSoundFile.setBuffer( [sound.buffer] );
+    newSoundFile.disconnect();
+    reverb.process( newSoundFile, 1, 1 );
+    const newSound = {
+      pos: createVector( sound.pos.x, sound.pos.y ),
+      soundFile:  newSoundFile,
+      note: sound.note
+    }
+
+    sounds.push( newSound );
+
+    console.log( '[SOUND]: New sound dropped at [%i, %i]', newSound.pos.x, newSound.pos.y, newSound );
 
   }
 

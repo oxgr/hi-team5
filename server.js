@@ -18,7 +18,8 @@ const io = socket( server, {
 let world = {
 
   agents: [],
-  environment: []
+  environment: [],
+  sounds: []
 
 };
 
@@ -56,6 +57,15 @@ function newConnection( socket ) {
     socket.broadcast.emit( 'add', data );
     socket.data.color = data.color;
     world.agents.push(data);
+    
+  });
+
+  socket.on( 'newSound', ( data ) => {
+    
+    socket.broadcast.emit( 'newSound', data );
+    world.sounds.push(data);
+
+    console.log( 'received new sound: ', data );
     
   });
   

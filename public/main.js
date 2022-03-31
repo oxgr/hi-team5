@@ -27,8 +27,6 @@ let world;
 
 let slowCirclePos, slowCircleRadius;
 let localSoundAgent;
-let mic,recorder,soundFile;
-let mySound;
 
 //sphere sprite and animation variables
 var sprite;
@@ -47,8 +45,6 @@ let clouds;
 let rings;
 function preload() {
 
-  soundFormats('mp3', 'ogg');
-  mySound = loadSound('assets/CollideSound.mp3');
 
   //loading the images and animation for the sphere sprites
     spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
@@ -62,20 +58,7 @@ function preload() {
 */
 function setup() {  
   
-  mic = new p5.AudioIn();
-
-  // prompts user to enable their browser mic
-  mic.start();
-
-  // create a sound recorder
-  recorder = new p5.SoundRecorder();
-
-  // connect the mic to the recorder
-  recorder.setInput(mic);
-
-  // this sound file will be used to
-  // playback & save the recording
-  soundFile = new p5.SoundFile();
+  
 
 
 //new group added for the sphere sprites to be held. Works like an array
