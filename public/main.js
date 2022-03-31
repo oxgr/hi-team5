@@ -32,12 +32,19 @@ let mySound;
 
 //sphere sprite and animation variables
 var sprite;
-var spinningAnimation
+var spinningAnimation;
+var alternativeAnimation;
 let sprites;
 let bg;
 var ringSprite;
 
+//clouds
+let localCloudsAgent;
+var cloudAnimation;
+var cloud;
+let clouds;
 
+let rings;
 function preload() {
 
   soundFormats('mp3', 'ogg');
@@ -45,7 +52,7 @@ function preload() {
 
   //loading the images and animation for the sphere sprites
     spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
-
+    cloudAnimation = loadAnimation("./Clouds/1.png","./Clouds/10.png");
    bg=loadImage("./assets/bg.png");
 
 }
@@ -72,7 +79,10 @@ function setup() {
 
 
 //new group added for the sphere sprites to be held. Works like an array
+
+clouds = new Group();
 sprites = new Group();
+rings = new Group();
 
 
 
@@ -92,9 +102,13 @@ sprites = new Group();
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
 
   // Initialises thisAgent with a random position and color
+  localCloudsAgent = new CloudsAgent(round(random(5,10)));
+
   localAgent = new Agent( random( width), random( height ), randomColor);
   
   localSoundAgent = new SoundAgent( 100, 100, 'green' );
+
+  
  
 
   
@@ -145,6 +159,7 @@ function draw() {
     const speed = agent.checkSpace( slowCirclePos, slowCircleRadius )
     agent.move( speed );
     agent.show();
+
   
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }

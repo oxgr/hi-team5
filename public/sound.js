@@ -59,6 +59,7 @@ function soundSetup() {
 
 
 ringSprite = createSprite(soundCursorPos.x, soundCursorPos.y, soundSize, soundSize);
+rings.add(ringSprite);
 }
 
 /**
@@ -122,6 +123,8 @@ function soundDraw() {
   }
 
   // Move cursor slightly towards next note.
+  //soundCursorPos get controller by the ringSprite so I commented this out
+
   //soundCursorPos.lerp( soundTargetPos, cursorSpeed );
 
   // Draw cursor with just a red stroke.
@@ -130,26 +133,53 @@ function soundDraw() {
   strokeWeight( 2 );
   ellipse( soundCursorPos.x, soundCursorPos.y, soundSize );
   
-  //ringSprite.visible=false;
-  drawSprites();
+  //draw the ringSprite
+  drawSprites(rings);
+
+
+  //ringSprite properties
+
+  // make the ringSprite follow the soundTargetPos implementation:(attraction force(bigger number means sprite is more attracted to the point specified), x, y)
   ringSprite.attractionPoint(1,soundTargetPos.x,soundTargetPos.y);
-  
+
+  // makes the ring follow the ringSprite
   ringSprite.position=soundCursorPos;
+<<<<<<< Updated upstream
   if(ringSprite.bounce(sprites)){
     mySound.play();
     console.log("bounced!")
   }
+=======
+
+  // type of collision used. Callback function goes in here as well implementation sprite.collisiontype(sprite to collide with, callback function)
+  // both of the objects that are supposed to collide must be sprites
+  ringSprite.bounce(sprites);
+
+  // defines how heavy the ring is. Lower value means it get bounced around easier
+>>>>>>> Stashed changes
   ringSprite.mass=0.05;
+
+  //make the ringSprite invisible so you don't see it
   ringSprite.visible=false;
 
-  if(dist(soundCursorPos.x,soundCursorPos.y,soundTargetPos.x,soundTargetPos.y)>10){
-    ringSprite.maxSpeed=5;
-  }
+/*
+* end of ringSprite Properties
+*/
+
+//if the ring controlled by ringSprtite is withing 10 pixels of soundTargetPos then stop the ring from moving and telaport it to the soundTargetPos
+  if(dist(soundCursorPos.x,soundCursorPos.y,soundTargetPos.x,soundTargetPos.y)>10)
+  
+  //this determines how fast the ring sprite is allowed to travel
+ //when the ringSprite is more than 10 of soundTargetPos
+  {ringSprite.maxSpeed=5;}
+
+  //when the ringSprite is within 10px of soundTargetPos
   else{
 ringSprite.maxSpeed=0;
+//makes the ringSprite snap to the soundTargetPos
 soundCursorPos.y=soundTargetPos.y;
 soundCursorPos.x=soundTargetPos.x;
-}
+  }
 }
 
 /**

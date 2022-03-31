@@ -1,8 +1,6 @@
-let size;
+let spriteSize;
 var circles;
 let speed;
-let sphx;
-let sphy;
 let frameSpeed;
 let colorPicker;
 
@@ -28,42 +26,39 @@ class Agent {
     this.radius = 50;
 
 
-    //set the size of the sprite
-    this.size = random(20, 50);
+    //set the spriteSize of the sprite
+    this.spriteSize = random(20, 50);
     this.colorPicker = round(random(0, 8));
-    //this.choseColor();
 
 
     //map functions
-    //takes the size of the sphere and makes smaller spheres faster and bigger spheres slower
-    //this.speed = map(this.size, 20, 50, 3, 1);
+    //takes the spriteSize of the sphere and makes smaller spheres faster and bigger spheres slower
+    //this.speed = map(this.spriteSize, 20, 50, 3, 1);
     this.speed=3;
 
-    // uses the size of the sphere to set an animation speed for each sphere
-    this.frameSpeed = map(this.size, 20, 50, 4, 20);
-
-    // sphere x and y coords. Determines where the spheres spawn/ start
+    // uses the spriteSize of the sphere to set an animation speed for each sphere
+    this.frameSpeed = map(this.spriteSize, 20, 50, 4, 20);
 
     // Sprite creation
-    //created a sprite with and x,y position and an x,y size position
-    this.sprite = createSprite(this.pos.x, this.pos.y, this.size, this.size);
+    //created a sprite with and (x, y) position and a (width, height) spriteSize position
+    this.sprite = createSprite(this.pos.x+10, this.pos.y+10, this.spriteSize, this.spriteSize);
 
-    // how big is this sphere going to look?
-    this.sprite.scale = this.size / 30;
+    // how big is this sphere going to be?
+    this.sprite.scale = this.spriteSize / 30;
 
-    // how heavy is the sphere? Good for collisions
-    this.sprite.mass = this.size / 20;
+    // how heavy is the sprite higher means it doesn't get bounced hard
+    this.sprite.mass = this.spriteSize / 20;
 
-    //set the animation speed (default is 4)
+    //set the animation speed of the sprite (default is 4)
     spinningAnimation.frameDelay = round(this.frameSpeed);
 
-    //add the animation to the sphere
+    //add the animation to the sprite
     this.sprite.addAnimation("fun", spinningAnimation);
 
     // how fast the sphere allowed to travel
     this.sprite.maxSpeed = this.speed;
 
-    //add the shpere to a group for collision purposes
+    //add the sprite to a group for use with collision this is an array or sprites
     sprites.add(this.sprite);
 
   }
@@ -81,22 +76,19 @@ class Agent {
   *  Draws the agent at the given <pos> position lerped (interpolated) to the <newPos> position. Filled with the color property.
   */
   show() {
-
+cloudDraw();
+  
     fill(this.color);
-    //ellipse(this.pos.x, this.pos.y, this.radius);
-
-
-    //creates an ellipse that will follow the sphere sprite's x,y position
     
-    //fill( this.color );
-    
-    ellipse( this.sprite.position.x, this.sprite.position.y,this.size);
+    //creates an ellipse that will follow the sphere sprite's x,y position 
+     
+    ellipse( this.sprite.position.x, this.sprite.position.y,this.spriteSize);
     drawSprites(sprites);
-
-    //the type of collision we want to use
+    sprites.depth=2;
+    //the type of collision we want to use with the callback function
     this.sprite.collide(sprites,spriteCollided);
 
-    //make the sphere move towards a specific point
+    //make the sphere move towards a specific point with as cetrain attraction to that point
     this.sprite.attractionPoint(this.speed / 20, this.pos.x, this.pos.y);
   }
 
