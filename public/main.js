@@ -138,8 +138,9 @@ spheres = new Group();
 */
 function draw() {
   
-  background(bg);
-  
+  //background(bg);
+  fill(211,232,242,20);
+  rect(0, 0, width, height);
   localSoundAgent.show();
   // Optionally draw background here.
   // world.drawBackground();
