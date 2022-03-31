@@ -41,7 +41,7 @@ var ringSprite;
 function preload() {
 
   soundFormats('mp3', 'ogg');
-  mySound = loadSound('assets/doorbell.mp3');
+  mySound = loadSound('assets/CollideSound.mp3');
 
   //loading the images and animation for the sphere sprites
     spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");

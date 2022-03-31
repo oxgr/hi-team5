@@ -135,7 +135,10 @@ function soundDraw() {
   ringSprite.attractionPoint(1,soundTargetPos.x,soundTargetPos.y);
   
   ringSprite.position=soundCursorPos;
-  ringSprite.bounce(sprites);
+  if(ringSprite.bounce(sprites)){
+    mySound.play();
+    console.log("bounced!")
+  }
   ringSprite.mass=0.05;
   ringSprite.visible=false;
 
