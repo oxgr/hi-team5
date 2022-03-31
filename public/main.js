@@ -41,6 +41,7 @@ let localCloudsAgent;
 var cloudAnimation;
 var cloud;
 let clouds;
+let tempColor;
 
 let rings;
 function preload() {
@@ -48,7 +49,7 @@ function preload() {
 
   //loading the images and animation for the sphere sprites
     spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
-    cloudAnimation = loadAnimation("./Clouds/1.png","./Clouds/10.png");
+    cloudAnimation = loadAnimation("./Clouds/1.png","./Clouds/6.png");
    bg=loadImage("./assets/bg.png");
 
 }
@@ -83,13 +84,14 @@ rings = new Group();
   
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
+  tempColor=randomColor;
 
   // Initialises thisAgent with a random position and color
-  localCloudsAgent = new CloudsAgent(round(random(5,10)));
+  localCloudsAgent = new CloudsAgent(round(random(10,15)));
 
   localAgent = new Agent( random( width), random( height ), randomColor);
   
-  localSoundAgent = new SoundAgent( 100, 100, 'green' );
+  localSoundAgent = new SoundAgent( width/2, height/2, 'green' );
 
   
  
@@ -122,8 +124,10 @@ rings = new Group();
 function draw() {
   
   background(bg);
-  
+
+   cloudDraw();
   localSoundAgent.show();
+
   // Optionally draw background here.
   // world.drawBackground();
 
@@ -134,12 +138,13 @@ function draw() {
 
   // draw slow circle
   slowCircleRadius = 100
-  fill( 255, 100 );
-  circle( slowCirclePos.x, slowCirclePos.y, slowCircleRadius * 2 );
+  fill( tempColor+"80" );
+  circle( slowCirclePos.x, slowCirclePos.y, slowCircleRadius+50 );
   
   // Run these methods for every agent in the world
   for ( let agent of world.agents ) {
-    const speed = agent.checkSpace( slowCirclePos, slowCircleRadius )
+    //const speed = agent.checkSpace( slowCirclePos, slowCircleRadius );
+    const speed = 0.1;
     agent.move( speed );
     agent.show();
 

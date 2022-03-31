@@ -12,7 +12,10 @@ class CloudsAgent{
 this.cloudNum=cloudNum;
 cloudAnimation.frameDelay=150;
 for(let i=0;i<this.cloudNum;i++){
-this.cloud=createSprite(random(width)+95, random(height/3), 32, 32);
+
+this.cloud=createSprite(random(width), random(height), 32, 32);
+this.cloud.setCollider("rectangle", 0, 0, 350, 200)
+//this.cloud.debug=true;
 this.cloud.scale=0.2;
 this.cloud.setSpeed(random(0.05,0.1));
 this.cloud.addAnimation("moving", cloudAnimation);

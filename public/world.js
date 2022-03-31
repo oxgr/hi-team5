@@ -42,8 +42,9 @@ class World {
   
     // If found, splice() removes the element in the array at the given index.
     if ( index > -1 ) { 
-      
+      this.agents[index].sprite.remove();
       this.agents.splice( index, 1 );
+
       console.log('[WORLD]: Agent %s removed!', data.color );
       
     } else {

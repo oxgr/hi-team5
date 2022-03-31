@@ -48,7 +48,7 @@ class SoundAgent extends Agent {
                 localSoundAgent.color = '#00ff00';
                 this.state = 0;
             }
-
+            tempColor=localSoundAgent.color;
 
     }
 

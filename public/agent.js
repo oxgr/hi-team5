@@ -3,6 +3,7 @@ var circles;
 let speed;
 let frameSpeed;
 let colorPicker;
+var cloudHolder;
 
 function spriteCollided(collider, sp) {
   let sHold;
@@ -15,6 +16,7 @@ function spriteCollided(collider, sp) {
   //collider.remove();
 }
 function cloudCollided(sprite, cloud){
+cloudHolder=cloud;
 
 }
 
@@ -45,9 +47,11 @@ class Agent {
     // Sprite creation
     //created a sprite with and (x, y) position and a (width, height) spriteSize position
     this.sprite = createSprite(this.pos.x+10, this.pos.y+10, this.spriteSize, this.spriteSize);
+    this.sprite.setCollider("circle", 0, 0, this.spriteSize/2);
+    //this.sprite.debug=true;
 
     // how big is this sphere going to be?
-    this.sprite.scale = this.spriteSize / 30;
+    //this.sprite.scale = this.spriteSize / 30;
 
     // how heavy is the sprite higher means it doesn't get bounced hard
     this.sprite.mass = this.spriteSize / 20;
@@ -59,7 +63,7 @@ class Agent {
     this.sprite.addAnimation("fun", spinningAnimation);
 
     // how fast the sphere allowed to travel
-    this.sprite.maxSpeed = this.speed;
+    this.sprite.maxSpeed = 3;
 
     //add the sprite to a group for use with collision this is an array or sprites
     sprites.add(this.sprite);
@@ -79,7 +83,7 @@ class Agent {
   *  Draws the agent at the given <pos> position lerped (interpolated) to the <newPos> position. Filled with the color property.
   */
   show() {
-cloudDraw();
+
   
     fill(this.color);
     
@@ -92,7 +96,7 @@ cloudDraw();
     //the type of collision we want to use with the callback function
     this.sprite.collide(sprites,spriteCollided);
 
-   if(this.sprite.overlap(clouds)){
+   if(this.sprite.overlap(clouds, cloudCollided)){
     this.sprite.maxSpeed=1;
    }
    else this.sprite.maxSpeed=3;
