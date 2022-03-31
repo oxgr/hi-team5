@@ -31,36 +31,28 @@ let mic,recorder,soundFile;
 let mySound;
 
 //sphere sprite and animation variables
-var sphere;
-var sequenceAnimation;
-var sphereBrown;
-var shpereBlue;
-var sphereGreen;
-var sphereOrange;
-var spherePink;
-var spherePurple;
-var sphereRainbow;
-var sphereRed;
-var sphereYellow;
-let spheres;
+var sprite;
+var spinningAnimation;
+var alternativeAnimation;
+let sprites;
 let bg;
+var ringSprite;
 
+//clouds
+let localCloudsAgent;
+var cloudAnimation;
+var cloud;
+let clouds;
 
+let rings;
 function preload() {
 
   soundFormats('mp3', 'ogg');
-  mySound = loadSound('assets/doorbell.mp3');
+  mySound = loadSound('assets/CollideSound.mp3');
 
   //loading the images and animation for the sphere sprites
-    sphereBlue = loadAnimation("./BallSprite/Blue/1.png","./BallSprite/Blue/8.png");
-    sphereBrown = loadAnimation("./BallSprite/Brown/1.png","./BallSprite/Brown/8.png");
-    sphereGreen = loadAnimation("./BallSprite/Green/1.png","./BallSprite/Green/8.png");
-    sphereOrange = loadAnimation("./BallSprite/Orange/1.png","./BallSprite/Orange/8.png");
-    spherePink = loadAnimation("./BallSprite/Pink/1.png","./BallSprite/Pink/8.png");
-    spherePurple = loadAnimation("./BallSprite/Purple/1.png","./BallSprite/Purple/8.png");
-    sphereRainbow = loadAnimation("./BallSprite/Rainbow/1.png","./BallSprite/Rainbow/8.png");
-    sphereRed = loadAnimation("./BallSprite/Red/1.png","./BallSprite/Red/8.png");
-    sphereYellow = loadAnimation("./BallSprite/Yellow/1.png","./BallSprite/Yellow/8.png");
+    spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
+    cloudAnimation = loadAnimation("./Clouds/1.png","./Clouds/10.png");
    bg=loadImage("./assets/bg.png");
 
 }
@@ -87,7 +79,11 @@ function setup() {
 
 
 //new group added for the sphere sprites to be held. Works like an array
-spheres = new Group();
+
+clouds = new Group();
+sprites = new Group();
+rings = new Group();
+
 
 
     // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
@@ -106,9 +102,13 @@ spheres = new Group();
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
 
   // Initialises thisAgent with a random position and color
+  localCloudsAgent = new CloudsAgent(round(random(5,10)));
+
   localAgent = new Agent( random( width), random( height ), randomColor);
   
   localSoundAgent = new SoundAgent( 100, 100, 'green' );
+
+  
  
 
   
@@ -161,6 +161,7 @@ function draw() {
     const speed = agent.checkSpace( slowCirclePos, slowCircleRadius )
     agent.move( speed );
     agent.show();
+
   
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
