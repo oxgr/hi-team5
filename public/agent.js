@@ -39,7 +39,7 @@ class Agent {
     //map functions
     //takes the spriteSize of the sphere and makes smaller spheres faster and bigger spheres slower
     //this.speed = map(this.spriteSize, 20, 50, 3, 1);
-    this.speed=3;
+    this.speed=5;
 
     // uses the spriteSize of the sphere to set an animation speed for each sphere
     this.frameSpeed = map(this.spriteSize, 20, 50, 4, 20);
