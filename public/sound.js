@@ -144,19 +144,18 @@ function soundDraw() {
 
   // makes the ring follow the ringSprite
   ringSprite.position=soundCursorPos;
-<<<<<<< Updated upstream
+
   if(ringSprite.bounce(sprites)){
     mySound.play();
     console.log("bounced!")
   }
-=======
+
 
   // type of collision used. Callback function goes in here as well implementation sprite.collisiontype(sprite to collide with, callback function)
   // both of the objects that are supposed to collide must be sprites
   ringSprite.bounce(sprites);
 
   // defines how heavy the ring is. Lower value means it get bounced around easier
->>>>>>> Stashed changes
   ringSprite.mass=0.05;
 
   //make the ringSprite invisible so you don't see it
