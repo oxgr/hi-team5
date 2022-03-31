@@ -1,6 +1,7 @@
 //cloud Animations
 //var cloudAnimations;
 var cloudNum;
+
 //var direction;
 
 /**

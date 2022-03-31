@@ -14,6 +14,9 @@ function spriteCollided(collider, sp) {
   ellipse(sp.position.x, sp.position.y, sHold + 20);
   //collider.remove();
 }
+function cloudCollided(sprite, cloud){
+
+}
 
 class Agent {
 
@@ -83,10 +86,16 @@ cloudDraw();
     //creates an ellipse that will follow the sphere sprite's x,y position 
      
     ellipse( this.sprite.position.x, this.sprite.position.y,this.spriteSize);
+  
     drawSprites(sprites);
     sprites.depth=2;
     //the type of collision we want to use with the callback function
     this.sprite.collide(sprites,spriteCollided);
+
+   if(this.sprite.overlap(clouds)){
+    this.sprite.maxSpeed=1;
+   }
+   else this.sprite.maxSpeed=3;
 
     //make the sphere move towards a specific point with as cetrain attraction to that point
     this.sprite.attractionPoint(this.speed / 20, this.pos.x, this.pos.y);
