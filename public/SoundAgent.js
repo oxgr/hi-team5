@@ -7,7 +7,9 @@ let upldStar_dx, upldStar_dy;
 let theta;
 let maxTail;
 let active = false;
+
 class SoundAgent extends Agent {
+
   constructor ( x, y, color ) {
 
     super( x, y, color );
@@ -28,13 +30,12 @@ class SoundAgent extends Agent {
     frameRate( 60 );
     angleMode( DEGREES );
 
-
   }
+
   /** 
    * Pressed is a function to check how many times the SoundAgent were clicked
   */
-
-  pressed () {
+  pressed() {
 
     console.log( "clicked on the recorder!" );
 
@@ -63,11 +64,13 @@ class SoundAgent extends Agent {
       // soundFile.play();
 
     } else if ( this.state === 2 ) {
+
       localSoundAgent.color = '#00ffff';
       soundFile.play(); // play the result!
       //save(soundFile, 'mySound.wav');
       this.state++;
       active = false;
+
     } else {
 
       localSoundAgent.color = '#00ff00';
@@ -77,19 +80,17 @@ class SoundAgent extends Agent {
 
   }
 
-  checkIfClicked () {
+  checkIfClicked() {
 
     let d = dist( mouseX, mouseY, this.pos.x, this.pos.y );
     return ( d < this.radius );
 
   }
 
-
-
   /**
 *  Draws the agent at the given <pos> position lerped (interpolated) to the <newPos> position. Filled with the color property.
 */
-  show () {
+  show() {
     this.sprite.remove();
 
     if ( active === true ) {
