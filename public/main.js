@@ -44,6 +44,7 @@ let clouds;
 let tempColor;
 
 let rings;
+let testers;
 function preload() {
 
 
@@ -58,15 +59,15 @@ function preload() {
 *  p5.js function. Called once at the start of the sketch.
 */
 function setup() {  
-  
-  
 
+// Sprite groups
 
+//Generally used for collision sake
 //new group added for the sphere sprites to be held. Works like an array
-
 clouds = new Group();
 sprites = new Group();
 rings = new Group();
+testers = new Group();
 
 
 
@@ -126,7 +127,8 @@ function draw() {
   background(bg);
 
    cloudDraw();
-  localSoundAgent.show();
+
+  
 
   // Optionally draw background here.
   // world.drawBackground();
@@ -136,11 +138,7 @@ function draw() {
   // Disable the outline of the shape.
   noStroke();
 
-  // draw slow circle
-  slowCircleRadius = 100
-  fill( tempColor+"80" );
-  circle( slowCirclePos.x, slowCirclePos.y, slowCircleRadius+50 );
-  
+
   // Run these methods for every agent in the world
   for ( let agent of world.agents ) {
     //const speed = agent.checkSpace( slowCirclePos, slowCircleRadius );
@@ -152,6 +150,9 @@ function draw() {
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
   //draw every sprite that exists into the world
+  drawSprites(sprites);
+  localSoundAgent.show();
+drawSprites(testers);
   
   soundDraw();
   

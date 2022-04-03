@@ -13,7 +13,6 @@ function spriteCollided(collider, sp) {
   }
   else { sHold = sp.scale * 30; }
   ellipse(sp.position.x, sp.position.y, sHold + 20);
-  //collider.remove();
 }
 function cloudCollided(sprite, cloud){
 cloudHolder=cloud;
@@ -91,7 +90,7 @@ class Agent {
      
     ellipse( this.sprite.position.x, this.sprite.position.y,this.spriteSize);
   
-    drawSprites(sprites);
+    
     sprites.depth=2;
     //the type of collision we want to use with the callback function
     this.sprite.collide(sprites,spriteCollided);

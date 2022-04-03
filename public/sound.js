@@ -202,11 +202,13 @@ function soundDraw() {
 */
 
 //if the ring controlled by ringSprtite is withing 10 pixels of soundTargetPos then stop the ring from moving and telaport it to the soundTargetPos
-  if(dist(soundCursorPos.x,soundCursorPos.y,soundTargetPos.x,soundTargetPos.y)>10)
+let distanceFromPoint=dist(soundCursorPos.x,soundCursorPos.y,soundTargetPos.x,soundTargetPos.y);  
+
+  if(distanceFromPoint>10)
   
   //this determines how fast the ring sprite is allowed to travel
  //when the ringSprite is more than 10 of soundTargetPos
-  {ringSprite.maxSpeed=5;}
+  {ringSprite.maxSpeed=distanceFromPoint/30;}
 
   //when the ringSprite is within 10px of soundTargetPos
   else{
