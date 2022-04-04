@@ -23,7 +23,7 @@ data = {
 let socket;
 let localAgent;
 let world;
-let img;
+
 
 let slowCirclePos, slowCircleRadius;
 let localSoundAgent;
@@ -51,8 +51,7 @@ function preload() {
   //loading the images and animation for the sphere sprites
     spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
     cloudAnimation = loadAnimation("./Clouds/1.png","./Clouds/6.png");
-   img=loadImage("./assets/bg.png");
-   
+   bg=loadImage("./assets/bg.png");
 
 }
 
@@ -124,9 +123,9 @@ testers = new Group();
 *  p5.js function. Called continuously. Ideally runs 60 times per second i.e. 60 fps.
 */
 function draw() {
- 
-  image(img,0,0);
-  tint(255,10);
+  
+  background(bg);
+
    cloudDraw();
 
   
