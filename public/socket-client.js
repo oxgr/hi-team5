@@ -45,3 +45,8 @@ function setupSocketListeners( socket, world ) {
   socket.on( 'removeSound', ( sound ) => removeSound( sound ) )
 
 }
+
+function sendClearSounds() {
+  socket.emit( 'clearSounds', 0 );
+  return 'cleared!';
+}
