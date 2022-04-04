@@ -125,8 +125,15 @@ testers = new Group();
 */
 function draw() {
  
-  image(img,0,0);
+  drawSprites(sprites);
+  localSoundAgent.show();
+drawSprites(testers);
+  
+  soundDraw();
   tint(255,10);
+  image(img,0,0);
+  img.resize(width,height);
+  noTint();
    cloudDraw();
 
   
@@ -151,11 +158,7 @@ function draw() {
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
   //draw every sprite that exists into the world
-  drawSprites(sprites);
-  localSoundAgent.show();
-drawSprites(testers);
-  
-  soundDraw();
+
   
   
 }
