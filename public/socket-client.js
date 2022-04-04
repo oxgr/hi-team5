@@ -30,13 +30,13 @@ function setupSocketListeners( socket, world ) {
   } );
 
   socket.on( 'agentsInWorld', ( newWorld ) => world.addAgentsFromWorld( newWorld ) );
+  socket.on( 'soundsInWorld', ( newSounds ) => addSoundsFromWorld( newSounds ) );
 
   socket.on( 'add', ( data ) => world.addAgent( data ) );
   socket.on( 'update', ( data ) => world.updateAgent( data ) );
   socket.on( 'remove', ( data ) => world.removeAgent( data ) );
 
   socket.on( 'addSound', ( sound ) => {
-    sound.buffer = new Float32Array( sound.buffer );
     console.log( 'added new sound!', sound );
     addSound( sound );
   } );

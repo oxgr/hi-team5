@@ -24,6 +24,7 @@ let socket;
 let localAgent;
 let world;
 
+let mousePos;
 
 let slowCirclePos, slowCircleRadius;
 let localSoundAgent;
@@ -69,7 +70,7 @@ function setup() {
   rings = new Group();
   testers = new Group();
 
-
+  mousePos = createVector();
 
   // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
@@ -124,8 +125,8 @@ function setup() {
 */
 function draw() {
 
-  // background( bg );
-  background( 'beige' );
+  background( bg );
+  // background( 'beige' );
 
   cloudDraw();
 
@@ -135,6 +136,9 @@ function draw() {
   // world.drawBackground();
 
   localAgent.updateTarget( { x: mouseX, y: mouseY } );
+
+  if ( frameCount % 60 == 0 )
+    socket.emit( 'update', localAgent.getData() );
 
   // Disable the outline of the shape.
   noStroke();

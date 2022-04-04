@@ -371,6 +371,9 @@ function addSound ( sound ) {
 
     if ( sound.buffer != null ) {
 
+        if ( typeof sound.buffer != Float32Array )
+            sound.buffer = new Float32Array( sound.buffer );
+
         const newSoundFile = new p5.SoundFile();
         newSoundFile.setBuffer( [ sound.buffer ] );
         newSoundFile.disconnect();
@@ -397,7 +400,13 @@ function addSound ( sound ) {
 
 function updateSound( sound ) {
 
+    const found = sounds.find( soundInArray => soundInArray.id === sound.id );
 
+    if ( found ) {
+
+        found.pos.set( sound.pos.x, sound.pos.y );
+
+    }
   
 }
 
@@ -442,6 +451,14 @@ function getNewNotes ( count, sounds ) {
     return {
         currentNote: sounds[ count ] ? count : count - 1,
         nextNote: sounds[ nextNote ] ? nextNote : nextNote + 1
+    }
+
+}
+
+function addSoundsFromWorld( newSounds ) {
+
+    for ( let sound of newSounds ) {
+        addSound( sound );
     }
 
 }

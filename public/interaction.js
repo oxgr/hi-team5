@@ -3,47 +3,71 @@
 */
 function mouseClicked() {
 
-  const mousePos = createVector( mouseX, mouseY );
+  mousePos.set( mouseX, mouseY );
   // mousePos.set( mouseX, mouseY );
 
-  localAgent.updateTarget( mousePos );
+  // localAgent.updateTarget( mousePos );
 
-  socket.emit( 'update', localAgent.getData() )
+  // socket.emit( 'update', localAgent.getData() )
 
 
   if ( localSoundAgent.checkIfClicked() ) {
 
     localSoundAgent.pressed();
 
-  } else {
-
-  const soundClicked = getSoundClicked( mousePos );
-
-    if ( soundClicked ) {
-      removeSound( soundClicked );
-      socket.emit( 'removeSound', soundClicked);
-    } else {
-      const newSound = createSound( { x: mouseX, y: mouseY } );
-      if ( newSound ) {
-        addSound( newSound );
-        socket.emit( 'addSound', newSound );
-        console.log( ' new sound emitted', newSound );
-      }
-    }
-
   }
 
 
 }
 
+let soundClicked;
+
 function mousePressed() {
 
+  mousePos.set( mouseX, mouseY );
 
+  soundClicked = getSoundClicked( mousePos );
 
 }
 
 
 function mouseDragged() {
+
+  if ( soundClicked ) {
+
+    soundClicked.pos.x = mouseX;
+    soundClicked.pos.y = mouseY;
+
+    socket.emit( 'updateSound', soundClicked );
+    
+  }
+
+}
+
+function mouseReleased() {
+
+  const distance = dist( mouseX, mouseY, mousePos.x, mousePos.y );
+
+  // Checking if soundClicked exists and mimicking a click i.e. mouse didn't drag far.
+  if ( soundClicked && distance < 5 ) {
+
+    removeSound( soundClicked );
+    socket.emit( 'removeSound', soundClicked);
+
+  } else if ( !soundClicked ) {
+
+    const newSound = createSound( { x: mouseX, y: mouseY } );
+    if ( newSound ) {
+      addSound( newSound );
+      socket.emit( 'addSound', newSound );
+      console.log( 'new sound emitted' );
+    }
+
+  }
+
+    
+
+  soundClicked = undefined;
 
 }
 
