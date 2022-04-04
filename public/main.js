@@ -101,7 +101,7 @@ function setup() {
   // Adds thisAgent to the local world.
   world.addAgent( localAgent );
 
-  world.agents.push( localSoundAgent );
+  // world.agents.push( localSoundAgent );
 
   // Retrieves current world from the server.
   socket.emit( 'getAgentsInWorld', 0 );
@@ -124,7 +124,8 @@ function setup() {
 */
 function draw() {
 
-  background( bg );
+  // background( bg );
+  background( 'beige' );
 
   cloudDraw();
 

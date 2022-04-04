@@ -8,10 +8,7 @@ function mouseClicked() {
 
   localAgent.updateTarget( mousePos );
 
-  socket.emit( 'update', localAgent.getData() );
-
-  const soundClicked = getSoundClicked( mousePos );
-
+  socket.emit( 'update', localAgent.getData() )
 
 
   if ( localSoundAgent.checkIfClicked() ) {
@@ -20,13 +17,16 @@ function mouseClicked() {
 
   } else {
 
+  const soundClicked = getSoundClicked( mousePos );
+
     if ( soundClicked ) {
       removeSound( soundClicked );
+      socket.emit( 'removeSound', soundClicked);
     } else {
-      const newSound = createSound( localAgent.pos );
+      const newSound = createSound( { x: mouseX, y: mouseY } );
       if ( newSound ) {
-        dropSound( newSound );
-        socket.emit( 'newSound', newSound );
+        addSound( newSound );
+        socket.emit( 'addSound', newSound );
         console.log( ' new sound emitted', newSound );
       }
     }

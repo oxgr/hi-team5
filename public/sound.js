@@ -183,7 +183,7 @@ function soundDraw () {
 
     if ( ringSprite.bounce( sprites ) ) {
         collideSound.play();
-        console.log( "bounced!" )
+        // console.log( "bounced!" )
     }
 
 
@@ -324,6 +324,7 @@ function createSound ( pos ) {
 
         const newSound = {
 
+            id: Math.floor( Math.random() * Math.pow( 16, 4 ) ).toString( 16 ),
             pos: {
                 x: pos.x,
                 y: pos.y
@@ -333,7 +334,7 @@ function createSound ( pos ) {
 
         }
 
-        console.log( '[SOUND]: New sound created.' );
+        console.log( '[SOUND]: New sound created.', newSound );
 
         return newSound;
 
@@ -358,7 +359,7 @@ function getSoundClicked ( mousePos ) {
             return sound;
     }
 
-    return undefined;
+    return undefined; 
 
 }
 
@@ -366,7 +367,7 @@ function getSoundClicked ( mousePos ) {
  * Adds a new sound into the sounds array at the position given.
  * @param {object} sound 
  */
-function dropSound ( sound ) {
+function addSound ( sound ) {
 
     if ( sound.buffer != null ) {
 
@@ -375,6 +376,7 @@ function dropSound ( sound ) {
         newSoundFile.disconnect();
         reverb.process( newSoundFile, 1, 1 );
         const newSound = {
+            id: sound.id,
             pos: createVector( sound.pos.x, sound.pos.y ),
             soundFile: newSoundFile,
             note: sound.note
@@ -384,9 +386,19 @@ function dropSound ( sound ) {
 
         console.log( '[SOUND]: New sound dropped at [%i, %i]', newSound.pos.x, newSound.pos.y, newSound );
 
+    } else {
+
+        console.log( "[SOUND]: Tried to add a new sound, but there's no buffer!" );
+
     }
 
 
+}
+
+function updateSound( sound ) {
+
+
+  
 }
 
 /**
@@ -395,10 +407,14 @@ function dropSound ( sound ) {
  */
 function removeSound ( sound ) {
 
-    const index = sounds.indexOf( sound );
+    const index = sounds.findIndex( soundInArray => soundInArray.id === sound.id );
 
-    if ( index > -1 )
+    if ( index > -1 ) {
+        console.log( '[SOUND]: Removed sound with id: ', sounds[ index ].id );
         sounds.splice( index, 1 );
+    } else {
+        console.log( '[SOUND]: Tried to remove sound, but couldnt find index.' );
+    }
 
 }
 
