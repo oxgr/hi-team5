@@ -3,25 +3,25 @@
 */
 function mouseClicked() {
 
-  const mousePos = createVector(mouseX, mouseY);
+  const mousePos = createVector( mouseX, mouseY );
   // mousePos.set( mouseX, mouseY );
 
-  localAgent.updateTarget(mousePos);
+  localAgent.updateTarget( mousePos );
 
-  socket.emit('update', localAgent.getData());
+  socket.emit( 'update', localAgent.getData() );
 
-  const soundClicked = getSoundClicked(mousePos);
+  const soundClicked = getSoundClicked( mousePos );
 
-  
+
 
   if ( localSoundAgent.checkIfClicked() ) {
-    
+
     localSoundAgent.pressed();
 
   } else {
 
-    if (soundClicked) {
-      removeSound(soundClicked);
+    if ( soundClicked ) {
+      removeSound( soundClicked );
     } else {
       const newSound = createSound( localAgent.pos );
       if ( newSound ) {
@@ -32,13 +32,13 @@ function mouseClicked() {
     }
 
   }
-  
+
 
 }
 
 function mousePressed() {
 
-  
+
 
 }
 
@@ -49,21 +49,22 @@ function mouseDragged() {
 
 function keyPressed() {
 
-  console.log(keyCode);
+  console.log( keyCode );
+  console.log( String.fromCharCode( keyCode ) );
 
   // if spacebar
-  if (keyCode == 32) {
+  if ( keyCode == 32 ) {
     soundEnabled = !soundEnabled;
-    toggleSound(soundEnabled);
+    toggleSound( soundEnabled );
 
-    console.log({ soundEnabled: soundEnabled })
+    console.log( { soundEnabled: soundEnabled } )
   }
 
-  if (keyCode == BACKSPACE) {
+  if ( keyCode == BACKSPACE ) {
     clearSounds();
   }
 
-  if (keyCode == 68) {
-    dropSound(mouseX, mouseY);
+  if ( keyCode == 68 ) {
+    dropSound( mouseX, mouseY );
   }
 }
