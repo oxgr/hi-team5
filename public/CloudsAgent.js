@@ -1,7 +1,7 @@
 //cloud Animations
 //var cloudAnimations;
 var cloudNum;
-var t;
+//var t;
 //var direction;
 
 /**
@@ -28,12 +28,12 @@ console.log(cloudNum);
   }
 }
 function cloudDraw(){
-  t = t + 0.1;
+  //t = t + 0.1;
   drawSprites(clouds);
   //direction+=2;
   for(var i = 0; i<clouds.length; i++) {
     var c = clouds[i];
-    c.y = c.y + Math.sin(2*t)*100.;
+    //c.y = c.y + Math.sin(2*t)*100.;
     //moving all the ghosts y following a sin function (sinusoid)
       if(c.position.x > width+50)
        c.position.x = -150;
