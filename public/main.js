@@ -100,7 +100,8 @@ testers = new Group();
   
   // Adds thisAgent to the local world.
   world.addAgent( localAgent );
-  
+  world.addAgent( localCloudsAgent );
+  world.agents.push(localCloudsAgent);
   world.agents.push( localSoundAgent );
   
   // Retrieves current world from the server.
@@ -129,6 +130,7 @@ function draw() {
    cloudDraw();
 
   
+  
 
   // Optionally draw background here.
   // world.drawBackground();
@@ -145,14 +147,31 @@ function draw() {
     const speed = 0.1;
     agent.move( speed );
     agent.show();
+    /**for each of the target:
+  1.Update target.
+  2.Set collision enabled && query and physics.
+  3.enalbe single probe collision channel.
+  4.apply rigid body dynamics.
+  **/
+    let cData = agent.getData();
+    if cData.x
+  for ( let lca of world.localCloudsAgent ) {
+    if(Math.sqrt(Math.pow(cData.x-lca.x,2)+Math.pow(cData.y-lca.y,2))<10){
+     
+      const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
+      tempColor=randomColor;
+       localCloudsAgent = new CloudsAgent(round(random(10,15)));
 
-  
+  // Initialises thisAgent with a random position and color
+  localCloudsAgent = new CloudsAgent(round(random(10,15)));
+       }
+  }
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
   //draw every sprite that exists into the world
   drawSprites(sprites);
   localSoundAgent.show();
-drawSprites(testers);
+  drawSprites(testers);
   
   soundDraw();
   
