@@ -146,7 +146,7 @@ function draw() {
     agent.move( speed );
     agent.show();
     if(agent.speed>=0.1){
-      agent.sRC();
+      //agent.sRC();
     }
   
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
