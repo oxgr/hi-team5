@@ -44,7 +44,7 @@ function mousePressed() {
 
 
 function mouseDragged() {
-   localAgent.color = localAgent.color * 0.2;
+
 }
 
 function keyPressed() {
