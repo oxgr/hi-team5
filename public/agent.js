@@ -1,12 +1,11 @@
-let size;
+let spriteSize;
 var circles;
 let speed;
-let sphx;
-let sphy;
 let frameSpeed;
 let colorPicker;
+var cloudHolder;
 
-function sphereLight(collider, sp) {
+function spriteCollided(collider, sp) {
   let sHold;
   fill('rgba(100%,100%,100%,0.5)');
   if (collider.scale > sp.scale) {
@@ -14,7 +13,10 @@ function sphereLight(collider, sp) {
   }
   else { sHold = sp.scale * 30; }
   ellipse(sp.position.x, sp.position.y, sHold + 20);
-  //collider.remove();
+}
+function cloudCollided(sprite, cloud){
+cloudHolder=cloud;
+
 }
 
 class Agent {
@@ -28,82 +30,45 @@ class Agent {
     this.radius = 50;
 
 
-    //set the size of the sprite
-    this.size = random(20, 50);
+    //set the spriteSize of the sprite
+    this.spriteSize = random(20, 50);
     this.colorPicker = round(random(0, 8));
-    this.choseColor();
 
 
     //map functions
-    //takes the size of the sphere and makes smaller spheres faster and bigger spheres slower
-    this.speed = map(this.size, 20, 50, 5, 1);
+    //takes the spriteSize of the sphere and makes smaller spheres faster and bigger spheres slower
+    //this.speed = map(this.spriteSize, 20, 50, 3, 1);
+    this.speed=5;
 
-    // uses the size of the sphere to set an animation speed for each sphere
-    this.frameSpeed = map(this.size, 20, 50, 4, 20);
-
-    // sphere x and y coords. Determines where the spheres spawn/ start
-    this.sphx = random(0, width);
-    this.sphy = random(0, height);
+    // uses the spriteSize of the sphere to set an animation speed for each sphere
+    this.frameSpeed = map(this.spriteSize, 20, 50, 4, 20);
 
     // Sprite creation
-    //created a sprite with and x,y position and an x,y size position
-    this.sphere = createSprite(this.sphx, this.sphy, this.size, this.size);
+    //created a sprite with and (x, y) position and a (width, height) spriteSize position
+    this.sprite = createSprite(this.pos.x+10, this.pos.y+10, this.spriteSize, this.spriteSize);
+    this.sprite.setCollider("circle", 0, 0, this.spriteSize/2);
+    //this.sprite.debug=true;
 
-    // how big is this sphere going to look?
-    this.sphere.scale = this.size / 30;
+    // how big is this sphere going to be?
+    //this.sprite.scale = this.spriteSize / 30;
 
-    // how heavy is the sphere? Good for collisions
-    this.sphere.mass = this.size / 20;
+    // how heavy is the sprite higher means it doesn't get bounced hard
+    this.sprite.mass = this.spriteSize / 20;
 
-    //set the animation speed (default is 4)
-    sequenceAnimation.frameDelay = round(this.frameSpeed);
+    //set the animation speed of the sprite (default is 4)
+    spinningAnimation.frameDelay = round(this.frameSpeed);
 
-    //add the animation to the sphere
-    this.sphere.addAnimation("fun", sequenceAnimation);
+    //add the animation to the sprite
+    this.sprite.addAnimation("fun", spinningAnimation);
 
     // how fast the sphere allowed to travel
-    this.sphere.maxSpeed = this.speed;
+    this.sprite.maxSpeed = 3;
 
-    //add the shpere to a group for collision purposes
-    spheres.add(this.sphere);
+    //add the sprite to a group for use with collision this is an array or sprites
+    sprites.add(this.sprite);
 
   }
-  choseColor() {
-    console.log("Switcher Started");
-    switch (this.colorPicker) {
-      case 0:
-        sequenceAnimation = sphereBlue;
-        break;
-      case 1:
-        sequenceAnimation = sphereBrown;
-        break;
-      case 2:
-        sequenceAnimation = sphereGreen;
-        break;
-      case 3:
-        sequenceAnimation = sphereOrange;
-        break;
-      case 4:
-        sequenceAnimation = spherePink;
-        break;
-      case 5:
-        sequenceAnimation = spherePurple;
-        break;
-      case 6:
-        sequenceAnimation = sphereRed;
-        break;
-      case 7:
-        sequenceAnimation = sphereYellow;
-        break;
-      case 8:
-        sequenceAnimation = sphereRainbow;
-        break;
-    }
-    console.log("Switcher Stoped");
-  }
-
-
-
+  
   /**
   * Moves position one step towards the target. Right now, this is done by lerp()[https://p5js.org/reference/#/p5.Vector/lerp]
   */
@@ -118,24 +83,25 @@ class Agent {
   */
   show() {
 
+  
     fill(this.color);
-    // ellipse(this.pos.x, this.pos.y, this.radius);
+    
+    //creates an ellipse that will follow the sphere sprite's x,y position 
+     
+    ellipse( this.sprite.position.x, this.sprite.position.y,this.spriteSize);
+  
+    
+    sprites.depth=2;
+    //the type of collision we want to use with the callback function
+    this.sprite.collide(sprites,spriteCollided);
 
+   if(this.sprite.overlap(clouds, cloudCollided)){
+    this.sprite.maxSpeed=1;
+   }
+   else this.sprite.maxSpeed=3;
 
-    //creates am ellipse that will follow the sphere sprite's x,y position
-    drawSprites();
-    //fill( this.color );
-    //ellipse( this.sphere.position.x, this.sphere.position.y,this.size);
-
-    //the type of collision we ant to use
-    this.sphere.bounce(spheres);
-
-    //make the sphere move towards a specific point
-    this.sphere.attractionPoint(this.speed / 25, this.pos.x, this.pos.y);
-
-    // camera.position.x = this.sphere.position.x;
-    // camera.position.y = this.sphere.position.y;
-
+    //make the sphere move towards a specific point with as cetrain attraction to that point
+    this.sprite.attractionPoint(this.speed / 20, this.pos.x, this.pos.y);
   }
 
   /**
