@@ -38,5 +38,5 @@ function cloudDraw(){
       if(c.position.x > width+50)
        c.position.x = -150;
   }
-  clouds.depth=1; 
+  clouds.depth=1;  
 }
