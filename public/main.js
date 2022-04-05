@@ -145,7 +145,7 @@ function draw() {
     const speed = 0.1;
     agent.move( speed );
     agent.show();
-    if(agent.speed<0.1){
+    if(agent.speed>=0.1){
       agent.sRC();
     }
   
