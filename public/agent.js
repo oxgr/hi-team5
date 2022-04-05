@@ -127,7 +127,14 @@ class Agent {
     this.target.y = data.y;
 
   }
+  sRC(){
+    const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
+    this.color=randomColor;
 
+  }
+  
+  
+  
   /**
   * Creates a separate data object to send to server with just the minimum amount of information. Used to send local objects like thisAgent.
 
