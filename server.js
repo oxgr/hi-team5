@@ -31,11 +31,12 @@ function newConnection( socket ) {
   
   // Server-side listeners go here!
   
-  socket.on( 'getAgentsInWorld', () => {
+  socket.on( 'getWorld', () => {
     
     io.to( socket.id ).emit( 'agentsInWorld', world.agents );
+    io.to( socket.id ).emit( 'soundsInWorld', world.sounds );
     
-  } )
+  } );
   
   socket.on( 'update', ( data ) => {
     
@@ -58,14 +59,42 @@ function newConnection( socket ) {
     socket.data.color = data.color;
     world.agents.push(data);
     
-  });
-
-  socket.on( 'newSound', ( data ) => {
+    console.log( '[AGENT]: Agent added. New world.agents: ', world.agents );
     
-    socket.broadcast.emit( 'newSound', data );
-    world.sounds.push(data);
+  });
+  
+  socket.on( 'addSound', ( sound ) => {
+    
+    socket.broadcast.emit( 'addSound', sound );
+    world.sounds.push( sound );
 
-    console.log( 'received new sound: ', data );
+    console.log( 'added new sound: ', sound );
+    
+  });
+  
+  socket.on( 'updateSound', ( sound ) => { 
+    
+    socket.broadcast.emit( 'updateSound', sound );
+    
+    const found = world.sounds.find( soundInArr => soundInArr.id === sound.id );
+    
+    if ( found ) {
+      found.pos.x = sound.pos.x;
+      found.pos.y = sound.pos.y;
+    }
+    
+  });
+  
+  socket.on( 'removeSound', ( sound ) => {
+    
+    socket.broadcast.emit( 'removeSound', sound );
+    
+    const index = world.sounds.findIndex( soundInArr => soundInArr.id === sound.id );
+
+    if ( index > -1 ) {
+      world.sound.splice( index, 1 );
+      console.log( 'removed sound: ', sound.id );
+    }
     
   });
   
@@ -79,6 +108,18 @@ function newConnection( socket ) {
       world.agents.splice( index, 1 );
       console.log('someone disconnected! ');
     }
+    
+  });
+  
+  socket.on( 'clearSounds', () => {
+    
+    for ( let sound of world.sounds ) {
+      
+      io.emit( 'removeSound', sound );
+      
+    }
+    
+    world.sounds = [];
     
   });
   
