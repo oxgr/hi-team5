@@ -18,8 +18,8 @@ this.cloud.setCollider("rectangle", 0, 0, 350, 200)
 //this.cloud.debug=true;
 this.cloud.scale=0.2;
 this.cloud.setSpeed(random(0.05,Math.sin(2*t)*10.));
-this.cloud.addAnimation("moving", cloudAnimation);
-clouds.depth=-1;
+//this.cloud.addAnimation("moving", cloudAnimation);
+//clouds.depth=-1;
 clouds.add(this.cloud);
 }
 
