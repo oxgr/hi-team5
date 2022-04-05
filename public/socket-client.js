@@ -2,9 +2,9 @@
 * Initialises the socket connection and returns it.
 */
 function initSocket( url ) {
-  
+
   return io.connect( url );
-  
+
 }
 
 /**
@@ -23,22 +23,30 @@ Other names (world, update, etc...) are made up, so feel free to add new events 
 * @param <Socket.io> socket The instance of a socket.io connection.
 */
 function setupSocketListeners( socket, world ) {
-  
-  socket.on( 'connect', () => {
-    console.log( 'connected to server!')
-    socket.emit( 'getWorld' );
-  });
-  
-  socket.on( 'agentsInWorld',   ( newWorld ) => world.addAgentsFromWorld( newWorld ) );
-  
-  socket.on( 'update', ( data ) => world.updateAgent( data ) );
-  socket.on( 'add',    ( data ) => world.addAgent( data ));
-  socket.on( 'remove', ( data ) => world.removeAgent( data ));
 
-  socket.on( 'newSound' , ( sound ) => { 
-    sound.buffer = new Float32Array( sound.buffer );
-    console.log( 'received new sound!', sound );
-    dropSound( sound );
-  });
-  
+  socket.on( 'connect', () => {
+    console.log( 'connected to server!' )
+    socket.emit( 'getWorld' );
+  } );
+
+  socket.on( 'agentsInWorld', ( newWorld ) => world.addAgentsFromWorld( newWorld ) );
+  socket.on( 'soundsInWorld', ( newSounds ) => addSoundsFromWorld( newSounds ) );
+
+  socket.on( 'add', ( data ) => world.addAgent( data ) );
+  socket.on( 'update', ( data ) => world.updateAgent( data ) );
+  socket.on( 'remove', ( data ) => world.removeAgent( data ) );
+
+  socket.on( 'addSound', ( sound ) => {
+    console.log( 'added new sound!', sound );
+    addSound( sound );
+  } );
+
+  socket.on( 'updateSound', ( sound ) => updateSound( sound ) )
+  socket.on( 'removeSound', ( sound ) => removeSound( sound ) )
+
+}
+
+function sendClearSounds() {
+  socket.emit( 'clearSounds', 0 );
+  return 'cleared!';
 }

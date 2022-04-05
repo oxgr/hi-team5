@@ -24,6 +24,7 @@ let socket;
 let localAgent;
 let world;
 
+let mousePos;
 
 let slowCirclePos, slowCircleRadius;
 let localSoundAgent;
@@ -49,73 +50,73 @@ function preload() {
 
 
   //loading the images and animation for the sphere sprites
-    spinningAnimation = loadAnimation("./BallSprite/001.png","./BallSprite/008.png");
-    cloudAnimation = loadAnimation("./Clouds/1.png","./Clouds/6.png");
-   bg=loadImage("./assets/bg.png");
+  spinningAnimation = loadAnimation( "./BallSprite/001.png", "./BallSprite/008.png" );
+  cloudAnimation = loadAnimation( "./Clouds/1.png", "./Clouds/6.png" );
+  bg = loadImage( "./assets/bg.png" );
 
 }
 
 /**
 *  p5.js function. Called once at the start of the sketch.
 */
-function setup() {  
+function setup() {
 
-// Sprite groups
+  // Sprite groups
 
-//Generally used for collision sake
-//new group added for the sphere sprites to be held. Works like an array
-clouds = new Group();
-sprites = new Group();
-rings = new Group();
-testers = new Group();
+  //Generally used for collision sake
+  //new group added for the sphere sprites to be held. Works like an array
+  clouds = new Group();
+  sprites = new Group();
+  rings = new Group();
+  testers = new Group();
 
+  mousePos = createVector();
 
-
-    // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
+  // Creates a <canvas> element in the HTML page. This is where our sketch will draw. windowWidth/Height are variables native to p5.js.
   createCanvas( windowWidth, windowHeight );
-  
+
   // Create a new world that includes information on agents and environment.
   world = new World();
-  
+
   // Establishes socket.io connection to server.
   socket = initSocket( 'https://hi5-online.glitch.me' );
-  
+
   // Sets up event listeners. 
   setupSocketListeners( socket, world );
-  
+
   // Generate a random hexadecimal color code. Example: '#0129af'
   const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
-  tempColor=randomColor;
+  tempColor = randomColor;
 
   // Initialises thisAgent with a random position and color
-  localCloudsAgent = new CloudsAgent(round(random(10,15)));
+  localCloudsAgent = new CloudsAgent( round( random( 10, 15 ) ) );
 
-  localAgent = new Agent( random( width), random( height ), randomColor);
-  
-  localSoundAgent = new SoundAgent( width/2, height/2, 'green' );
+  localAgent = new Agent( random( width ), random( height ), randomColor );
 
-  
- 
+  localSoundAgent = new SoundAgent( width / 2, height / 2, 'green' );
 
-  
+
+
+
+
   // Adds thisAgent to the local world.
   world.addAgent( localAgent );
   world.addAgent( localCloudsAgent );
-  world.agents.push(localCloudsAgent);
+  world.agents.push( localCloudsAgent );
   world.agents.push( localSoundAgent );
-  
+
   // Retrieves current world from the server.
   socket.emit( 'getAgentsInWorld', 0 );
-  
+
   // Packages thisAgent and adds it to server world.
   socket.emit( 'add', localAgent.getData() );
-  
+
   // Packages thisAgent and sends it to other client worlds.
   socket.emit( 'update', localAgent.getData() );
 
   soundSetup();
 
-  slowCirclePos = createVector( width/2, height/2 );
+  slowCirclePos = createVector( width / 2, height / 2 );
 
 }
 
@@ -124,19 +125,24 @@ testers = new Group();
 *  p5.js function. Called continuously. Ideally runs 60 times per second i.e. 60 fps.
 */
 function draw() {
-  
-  background(bg);
 
-   cloudDraw();
+  background( bg );
+  // background( 'beige' );
 
-  
-  
+  cloudDraw();
+
+
+
+
 
   // Optionally draw background here.
   // world.drawBackground();
 
-  localAgent.updateTarget( {x: mouseX, y: mouseY });
-  
+  localAgent.updateTarget( { x: mouseX, y: mouseY } );
+
+  if ( frameCount % 60 == 0 )
+    socket.emit( 'update', localAgent.getData() );
+
   // Disable the outline of the shape.
   noStroke();
 
@@ -154,26 +160,26 @@ function draw() {
   4.apply rigid body dynamics.
   **/
     let cData = agent.getData();
-    if cData.x
-  for ( let lca of world.localCloudsAgent ) {
-    if(Math.sqrt(Math.pow(cData.x-lca.x,2)+Math.pow(cData.y-lca.y,2))<10){
-     
-      const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
-      tempColor=randomColor;
-       localCloudsAgent = new CloudsAgent(round(random(10,15)));
+    // if cData.x
+    for ( let lca of world.localCloudsAgent ) {
+        if ( Math.sqrt( Math.pow( cData.x - lca.x, 2 ) + Math.pow( cData.y - lca.y, 2 ) ) < 10 ) {
 
-  // Initialises thisAgent with a random position and color
-  localCloudsAgent = new CloudsAgent(round(random(10,15)));
-       }
-  }
+          const randomColor = '#' + Math.floor( Math.random() * Math.pow( 16, 6 ) ).toString( 16 );
+          tempColor = randomColor;
+          localCloudsAgent = new CloudsAgent( round( random( 10, 15 ) ) );
+
+          // Initialises thisAgent with a random position and color
+          localCloudsAgent = new CloudsAgent( round( random( 10, 15 ) ) );
+        }
+      }
     //sphere.attractionPoint(0.2, agent.pos.x, agent.pos.y);
   }
   //draw every sprite that exists into the world
-  drawSprites(sprites);
+  drawSprites( sprites );
   localSoundAgent.show();
-  drawSprites(testers);
-  
+  drawSprites( testers );
+
   soundDraw();
-  
-  
+
+
 }
