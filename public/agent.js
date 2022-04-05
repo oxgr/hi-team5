@@ -96,7 +96,7 @@ class Agent {
     this.sprite.collide(sprites,spriteCollided);
 
    if(this.sprite.overlap(clouds, cloudCollided)){
-    this.sRC();
+    //this.sRC();
     this.sprite.maxSpeed=1;
    }
    else this.sprite.maxSpeed=3;
